@@ -1,0 +1,21 @@
+{
+    "name": "jayrods/sql-builder",
+    "type": "library",
+    "author": {
+        "name": "Jaderson Rodrigues",
+        "email": "jaderson.rodrigues@yahoo.com",
+        "homepage": "https://www.github.com/Jadersonrilidio"
+    },
+    "license": "",
+    "autoload": {
+        "psr-4": {
+            "Jayrods\\SqlBuilder\\": "src/"
+        }
+    },
+    "autoload-dev": {},
+    "require": {},
+    "require-dev": {},
+    "scripts": {},
+    "scripts-descriptions": {},
+    "bin": ""
+}
