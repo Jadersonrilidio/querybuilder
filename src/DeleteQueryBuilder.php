@@ -52,7 +52,7 @@ class DeleteQueryBuilder extends QueryBuilder
         }
         $binder = $binder ?? "$column";
 
-        $this->conditions = "WHERE {$this->table}.$column $operator :$binder";
+        $this->conditions = "WHERE $column $operator :$binder";
         return $this;
     }
 
@@ -66,7 +66,7 @@ class DeleteQueryBuilder extends QueryBuilder
      */
     public function whereIn(string $column, string $subquery): self
     {
-        $this->conditions = "WHERE {$this->table}.$column IN ($subquery)";
+        $this->conditions = "WHERE $column IN ($subquery)";
         return $this;
     }
 
@@ -80,7 +80,7 @@ class DeleteQueryBuilder extends QueryBuilder
      */
     public function whereNotIn(string $column, string $subquery): self
     {
-        $this->conditions = "WHERE {$this->table}.$column NOT IN ($subquery)";
+        $this->conditions = "WHERE $column NOT IN ($subquery)";
         return $this;
     }
 
@@ -103,7 +103,7 @@ class DeleteQueryBuilder extends QueryBuilder
 
         $binder = $binder ?? "$column";
 
-        $this->conditions = "WHERE NOT {$this->table}.$column $operator :$binder";
+        $this->conditions = "WHERE NOT $column $operator :$binder";
         return $this;
     }
 
@@ -121,7 +121,7 @@ class DeleteQueryBuilder extends QueryBuilder
         $left = $left ?? "{$column}_left";
         $right = $right ?? "{$column}_right";
 
-        $this->conditions = "WHERE {$this->table}.$column BETWEEN :$left AND :$right";
+        $this->conditions = "WHERE $column BETWEEN :$left AND :$right";
         return $this;
     }
 
@@ -139,7 +139,7 @@ class DeleteQueryBuilder extends QueryBuilder
         $left = $left ?? "{$column}_left";
         $right = $right ?? "{$column}_right";
 
-        $this->conditions = "WHERE {$this->table}.$column NOT BETWEEN :$left AND :$right";
+        $this->conditions = "WHERE $column NOT BETWEEN :$left AND :$right";
         return $this;
     }
 
@@ -162,7 +162,7 @@ class DeleteQueryBuilder extends QueryBuilder
 
         $binder = $binder ?? "$column";
 
-        $this->conditions .= " AND {$this->table}.$column $operator :$binder";
+        $this->conditions .= " AND $column $operator :$binder";
         return $this;
     }
 
@@ -185,7 +185,7 @@ class DeleteQueryBuilder extends QueryBuilder
 
         $binder = $binder ?? "$column";
 
-        $this->conditions .= " AND NOT {$this->table}.$column $operator :$binder";
+        $this->conditions .= " AND NOT $column $operator :$binder";
         return $this;
     }
 
@@ -203,7 +203,7 @@ class DeleteQueryBuilder extends QueryBuilder
         $left = $left ?? "{$column}_left";
         $right = $right ?? "{$column}_right";
 
-        $this->conditions .= " AND {$this->table}.$column BETWEEN :$left AND :$right";
+        $this->conditions .= " AND $column BETWEEN :$left AND :$right";
         return $this;
     }
 
@@ -221,7 +221,7 @@ class DeleteQueryBuilder extends QueryBuilder
         $left = $left ?? "{$column}_left";
         $right = $right ?? "{$column}_right";
 
-        $this->conditions .= " AND {$this->table}.$column NOT BETWEEN :$left AND :$right";
+        $this->conditions .= " AND $column NOT BETWEEN :$left AND :$right";
         return $this;
     }
 
@@ -244,7 +244,7 @@ class DeleteQueryBuilder extends QueryBuilder
 
         $binder = $binder ?? "$column";
 
-        $this->conditions .= " OR {$this->table}.$column $operator :$binder";
+        $this->conditions .= " OR $column $operator :$binder";
         return $this;
     }
 
@@ -267,7 +267,7 @@ class DeleteQueryBuilder extends QueryBuilder
 
         $binder = $binder ?? "$column";
 
-        $this->conditions .= " OR NOT {$this->table}.$column $operator :$binder";
+        $this->conditions .= " OR NOT $column $operator :$binder";
         return $this;
     }
 
@@ -285,7 +285,7 @@ class DeleteQueryBuilder extends QueryBuilder
         $left = $left ?? "{$column}_left";
         $right = $right ?? "{$column}_right";
 
-        $this->conditions .= " OR {$this->table}.$column NOT BETWEEN :$left AND :$right";
+        $this->conditions .= " OR $column NOT BETWEEN :$left AND :$right";
         return $this;
     }
 
@@ -303,7 +303,7 @@ class DeleteQueryBuilder extends QueryBuilder
         $left = $left ?? "{$column}_left";
         $right = $right ?? "{$column}_right";
 
-        $this->conditions .= " OR {$this->table}.$column NOT BETWEEN :$left AND :$right";
+        $this->conditions .= " OR $column NOT BETWEEN :$left AND :$right";
         return $this;
     }
 
