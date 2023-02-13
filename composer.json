@@ -1,21 +1,26 @@
 {
-    "name": "jayrods/sql-builder",
+    "name": "jayrods/query-builder",
     "type": "library",
     "author": {
         "name": "Jaderson Rodrigues",
         "email": "jaderson.rodrigues@yahoo.com",
         "homepage": "https://www.github.com/Jadersonrilidio"
     },
-    "license": "",
+    "license": "GPL-3",
     "autoload": {
         "psr-4": {
-            "Jayrods\\SqlBuilder\\": "src/"
+            "Jayrods\\QueryBuilder\\": "src/"
         }
     },
-    "autoload-dev": {},
-    "require": {},
-    "require-dev": {},
-    "scripts": {},
-    "scripts-descriptions": {},
-    "bin": ""
+    "autoload-dev": {
+        "psr-4": {
+            "Jayrods\\QueryBuilder\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "make-class": "php bin/make_class"
+    },
+    "scripts-descriptions": {
+        "make-class": "autogenerates a class on 'src/' using the default namespace."
+    }
 }

@@ -1,0 +1,33 @@
+#!usr/bin/env php
+<?php
+
+$filePath = dirname(__DIR__) . '/src/';
+
+$fileName = $argv[1];
+
+$file = $filePath . $fileName . '.php';
+
+$content = "<?php" . PHP_EOL .
+    PHP_EOL .
+    "namespace Jayrods\\QueryBuilder;" . PHP_EOL .
+    PHP_EOL .
+    "class $fileName" . PHP_EOL .
+    "{" . PHP_EOL .
+    "    //" . PHP_EOL .
+    "}" . PHP_EOL;
+
+if (file_exists($file)) {
+    exit("Error: Class $fileName already exists." . PHP_EOL);
+}
+
+try {
+    $handle = fopen($file, 'w');
+
+    fwrite($handle, $content);
+
+    fclose($handle);
+} catch (Throwable $e) {
+    var_dump($e);
+}
+
+exit("Class $fileName successfuly created." . PHP_EOL);
