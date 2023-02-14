@@ -2,11 +2,14 @@
 
 namespace Jayrods\QueryBuilder;
 
+use Jayrods\QueryBuilder\Exceptions\InvalidOperatorException;
 use Jayrods\QueryBuilder\QueryBuilder;
-use Jayrods\QueryBuilder\Exception\InvalidOperatorException;
+use Jayrods\QueryBuilder\Traits\ValidateOperator;
 
 class UpdateQueryBuilder extends QueryBuilder
 {
+    use ValidateOperator;
+
     /**
      * Table Name.
      * 
@@ -70,7 +73,7 @@ class UpdateQueryBuilder extends QueryBuilder
      */
     public function where(string $column, string $operator, ?string $binder = null): self
     {
-        if (!$this->validOperator($operator)) {
+        if (!$this->isValidOperator($operator)) {
             throw new InvalidOperatorException('Invalid operator signal');
         }
         $binder = $binder ?? "$column";
@@ -120,7 +123,7 @@ class UpdateQueryBuilder extends QueryBuilder
      */
     public function whereNot(string $column, string $operator, ?string $binder = null): self
     {
-        if (!$this->validOperator($operator)) {
+        if (!$this->isValidOperator($operator)) {
             throw new InvalidOperatorException('Invalid operator signal');
         }
 
@@ -179,7 +182,7 @@ class UpdateQueryBuilder extends QueryBuilder
      */
     public function and(string $column, string $operator, ?string $binder = null): self
     {
-        if (!$this->validOperator($operator)) {
+        if (!$this->isValidOperator($operator)) {
             throw new InvalidOperatorException('Invalid operator signal');
         }
 
@@ -202,7 +205,7 @@ class UpdateQueryBuilder extends QueryBuilder
      */
     public function andNot(string $column, string $operator, ?string $binder = null): self
     {
-        if (!$this->validOperator($operator)) {
+        if (!$this->isValidOperator($operator)) {
             throw new InvalidOperatorException('Invalid operator signal');
         }
 
@@ -261,7 +264,7 @@ class UpdateQueryBuilder extends QueryBuilder
      */
     public function or(string $column, string $operator, ?string $binder = null): self
     {
-        if (!$this->validOperator($operator)) {
+        if (!$this->isValidOperator($operator)) {
             throw new InvalidOperatorException('Invalid operator signal');
         }
 
@@ -284,7 +287,7 @@ class UpdateQueryBuilder extends QueryBuilder
      */
     public function orNot(string $column, string $operator, ?string $binder = null): self
     {
-        if (!$this->validOperator($operator)) {
+        if (!$this->isValidOperator($operator)) {
             throw new InvalidOperatorException('Invalid operator signal');
         }
 
@@ -352,21 +355,5 @@ class UpdateQueryBuilder extends QueryBuilder
     {
         unset($this->table);
         $this->columns = $this->conditions = '';
-    }
-
-    /**
-     * Checks whether the operator sign is valid or not.
-     * 
-     * @param string $operator
-     * 
-     * @return bool
-     */
-    private function validOperator(string $operator): bool
-    {
-        return in_array(
-            strtoupper($operator),
-            ['=', '<>', '>', '<', '>=', '<=', 'LIKE'],
-            true
-        );
     }
 }

@@ -2,11 +2,8 @@
 
 namespace Jayrods\QueryBuilder;
 
-use Jayrods\QueryBuilder\QueryBuilderInterface;
-
-abstract class QueryBuilder implements QueryBuilderInterface
+abstract class QueryBuilder
 {
-
     /**
      * Last built query. If no query was built, return empty string;
      * 

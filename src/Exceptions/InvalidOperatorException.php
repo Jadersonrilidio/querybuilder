@@ -1,6 +1,6 @@
 <?php
 
-namespace Jayrods\QueryBuilder\Exception;
+namespace Jayrods\QueryBuilder\Exceptions;
 
 use DomainException;
 
