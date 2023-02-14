@@ -1,12 +1,15 @@
 {
     "name": "jayrods/query-builder",
     "type": "library",
-    "author": {
-        "name": "Jaderson Rodrigues",
-        "email": "jaderson.rodrigues@yahoo.com",
-        "homepage": "https://www.github.com/Jadersonrilidio"
-    },
-    "license": "GPL-3",
+    "description": "Simple query builder to ease SQL query writing",
+    "authors": [
+        {
+            "name": "Jaderson Rodrigues",
+            "email": "jaderson.rodrigues@yahoo.com",
+            "homepage": "https://www.github.com/Jadersonrilidio"
+        }
+    ],
+    "license": "GPL-3.0-or-later",
     "autoload": {
         "psr-4": {
             "Jayrods\\QueryBuilder\\": "src/"
