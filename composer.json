@@ -11,6 +11,9 @@
     ],
     "license": "GPL-3.0-or-later",
     "autoload": {
+        "files": [
+            "./functions/env.php"
+        ],
         "psr-4": {
             "Jayrods\\QueryBuilder\\": "src/"
         }
@@ -21,9 +24,11 @@
         }
     },
     "scripts": {
+        "proc-test": "php tests/development-test.php",
         "make-class": "php bin/make_class"
     },
     "scripts-descriptions": {
-        "make-class": "autogenerates a class on 'src/' using the default namespace."
+        "proc-test": "Run a simple test script in procedural PHP",
+        "make-class": "Autogenerates a class on 'src/' using the default namespace."
     }
 }

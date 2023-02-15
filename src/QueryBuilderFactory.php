@@ -3,10 +3,14 @@
 namespace Jayrods\QueryBuilder;
 
 use InvalidArgumentException;
-use Jayrods\QueryBuilder\{DeleteQueryBuilder, InsertQueryBuilder, SelectQueryBuilder, UpdateQueryBuilder};
-use Jayrods\QueryBuilder\QueryBuilder;
+use Jayrods\QueryBuilder\Builders\QueryBuilderInterface;
+use Jayrods\QueryBuilder\Factories\{
+    ConstrainedQueryBuilderFactory,
+    QueryBuilderFactoryInterface,
+    SimpleQueryBuilderFactory
+};
 
-class QueryBuilderFactory
+class QueryBuilderFactory implements QueryBuilderFactoryInterface
 {
     public const DELETE = 'delete';
     public const INSERT = 'insert';
@@ -14,27 +18,20 @@ class QueryBuilderFactory
     public const UPDATE = 'update';
 
     /**
-     * Creates an instance of QueryBuilder according to given case.
+     * Creates an instance of QueryBuilderInterface according to given case.
      * 
      * @throws InvalidArgumentException
      * 
      * @param string $case
      * 
-     * @return QueryBuilder
+     * @return QueryBuilderInterface
      */
-    public function create(string $case): QueryBuilder
+    public function create(string $case): QueryBuilderInterface
     {
-        switch ($case) {
-            case self::DELETE:
-                return new DeleteQueryBuilder();
-            case self::INSERT:
-                return new InsertQueryBuilder();
-            case self::SELECT:
-                return new SelectQueryBuilder();
-            case self::UPDATE:
-                return new UpdateQueryBuilder();
-            default:
-                throw new InvalidArgumentException('builder mode not found');
-        }
+        $factory = env('QUERY_BUILDER_ENABLE_STATE_MACHINE', true)
+            ? new ConstrainedQueryBuilderFactory
+            : new SimpleQueryBuilderFactory;
+
+        return $factory->create($case);
     }
 }

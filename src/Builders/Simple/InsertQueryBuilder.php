@@ -1,8 +1,8 @@
 <?php
 
-namespace Jayrods\QueryBuilder;
+namespace Jayrods\QueryBuilder\Builders\Simple;
 
-use Jayrods\QueryBuilder\QueryBuilder;
+use Jayrods\QueryBuilder\Builders\QueryBuilder;
 
 class InsertQueryBuilder extends QueryBuilder
 {
@@ -48,10 +48,13 @@ class InsertQueryBuilder extends QueryBuilder
      * 
      * @return InsertQueryBuilder
      */
-    public function column(string $column): self
+    public function column(string $column, ?string $binder = null): self
     {
+        $binder = $binder ?? $column;
+
         $this->columns .= "$column, ";
-        $this->values .= ":$column, ";
+
+        $this->values .= ":$binder, ";
 
         return $this;
     }

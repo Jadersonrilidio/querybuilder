@@ -2,3 +2,4 @@ _trash
 vendor
 bin
 tests
+.env

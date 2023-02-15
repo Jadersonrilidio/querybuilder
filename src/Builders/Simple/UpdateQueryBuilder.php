@@ -1,9 +1,9 @@
 <?php
 
-namespace Jayrods\QueryBuilder;
+namespace Jayrods\QueryBuilder\Builders\Simple;
 
 use Jayrods\QueryBuilder\Exceptions\InvalidOperatorException;
-use Jayrods\QueryBuilder\QueryBuilder;
+use Jayrods\QueryBuilder\Builders\QueryBuilder;
 use Jayrods\QueryBuilder\Traits\ValidateOperator;
 
 class UpdateQueryBuilder extends QueryBuilder
@@ -36,7 +36,7 @@ class UpdateQueryBuilder extends QueryBuilder
      * 
      * @param string $table
      * 
-     * @return SelectQueryBuilder
+     * @return UpdateQueryBuilder
      */
     public function update(string $table): self
     {
@@ -48,9 +48,9 @@ class UpdateQueryBuilder extends QueryBuilder
      * Adds a column to be selected.
      * 
      * @param string $column
-     * @param ?string $refTable If the column comes from a relationship, thus the table name must be inserted.
+     * @param ?string $binder
      * 
-     * @return SelectQueryBuilder
+     * @return UpdateQueryBuilder
      */
     public function column(string $column, ?string $binder = null): self
     {
@@ -69,7 +69,7 @@ class UpdateQueryBuilder extends QueryBuilder
      * 
      * @throws InvalidOperatorException
      * 
-     * @return SelectQueryBuilder
+     * @return UpdateQueryBuilder
      */
     public function where(string $column, string $operator, ?string $binder = null): self
     {
@@ -88,7 +88,7 @@ class UpdateQueryBuilder extends QueryBuilder
      * @param string $column
      * @param string $subquery
      * 
-     * @return SelectQueryBuilder
+     * @return UpdateQueryBuilder
      */
     public function whereIn(string $column, string $subquery): self
     {
@@ -102,7 +102,7 @@ class UpdateQueryBuilder extends QueryBuilder
      * @param string $column
      * @param string $subquery
      * 
-     * @return SelectQueryBuilder
+     * @return UpdateQueryBuilder
      */
     public function whereNotIn(string $column, string $subquery): self
     {
@@ -119,7 +119,7 @@ class UpdateQueryBuilder extends QueryBuilder
      * 
      * @throws InvalidOperatorException
      * 
-     * @return SelectQueryBuilder
+     * @return UpdateQueryBuilder
      */
     public function whereNot(string $column, string $operator, ?string $binder = null): self
     {
@@ -140,7 +140,7 @@ class UpdateQueryBuilder extends QueryBuilder
      * @param ?string $left
      * @param ?string $right
      * 
-     * @return SelectQueryBuilder
+     * @return UpdateQueryBuilder
      */
     public function whereBetween(string $column, ?string $left = null, ?string $right = null): self
     {
@@ -158,7 +158,7 @@ class UpdateQueryBuilder extends QueryBuilder
      * @param ?string $left
      * @param ?string $right
      * 
-     * @return SelectQueryBuilder
+     * @return UpdateQueryBuilder
      */
     public function whereNotBetween(string $column, ?string $left = null, ?string $right = null): self
     {
@@ -178,7 +178,7 @@ class UpdateQueryBuilder extends QueryBuilder
      * 
      * @throws InvalidOperatorException
      * 
-     * @return SelectQueryBuilder
+     * @return UpdateQueryBuilder
      */
     public function and(string $column, string $operator, ?string $binder = null): self
     {
@@ -201,7 +201,7 @@ class UpdateQueryBuilder extends QueryBuilder
      * 
      * @throws InvalidOperatorException
      * 
-     * @return SelectQueryBuilder
+     * @return UpdateQueryBuilder
      */
     public function andNot(string $column, string $operator, ?string $binder = null): self
     {
@@ -222,7 +222,7 @@ class UpdateQueryBuilder extends QueryBuilder
      * @param ?string $left
      * @param ?string $right
      * 
-     * @return SelectQueryBuilder
+     * @return UpdateQueryBuilder
      */
     public function andBetween(string $column, ?string $left = null, ?string $right = null): self
     {
@@ -240,7 +240,7 @@ class UpdateQueryBuilder extends QueryBuilder
      * @param ?string $left
      * @param ?string $right
      * 
-     * @return SelectQueryBuilder
+     * @return UpdateQueryBuilder
      */
     public function andNotBetween(string $column, ?string $left = null, ?string $right = null): self
     {
@@ -260,7 +260,7 @@ class UpdateQueryBuilder extends QueryBuilder
      * 
      * @throws InvalidOperatorException
      * 
-     * @return SelectQueryBuilder
+     * @return UpdateQueryBuilder
      */
     public function or(string $column, string $operator, ?string $binder = null): self
     {
@@ -283,7 +283,7 @@ class UpdateQueryBuilder extends QueryBuilder
      * 
      * @throws InvalidOperatorException
      * 
-     * @return SelectQueryBuilder
+     * @return UpdateQueryBuilder
      */
     public function orNot(string $column, string $operator, ?string $binder = null): self
     {
@@ -304,7 +304,7 @@ class UpdateQueryBuilder extends QueryBuilder
      * @param ?string $left
      * @param ?string $right
      * 
-     * @return SelectQueryBuilder
+     * @return UpdateQueryBuilder
      */
     public function orBetween(string $column, ?string $left = null, ?string $right = null): self
     {
@@ -322,7 +322,7 @@ class UpdateQueryBuilder extends QueryBuilder
      * @param ?string $left
      * @param ?string $right
      * 
-     * @return SelectQueryBuilder
+     * @return UpdateQueryBuilder
      */
     public function orNotBetween(string $column, ?string $left = null, ?string $right = null): self
     {

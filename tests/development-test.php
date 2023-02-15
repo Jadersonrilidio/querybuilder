@@ -6,11 +6,7 @@ use Jayrods\QueryBuilder\QueryBuilderFactory;
 
 $builderFactory = new QueryBuilderFactory;
 
-/**
- * INSERT TEST
- * 
- * @var Jayrods\QueryBuilder\InsertQueryBuilder
- */
+/** @var Jayrods\QueryBuilder\InsertQueryBuilder */
 $insert = $builderFactory->create(QueryBuilderFactory::INSERT);
 
 $query = $insert->insertInto('table')
@@ -21,11 +17,7 @@ $query = $insert->insertInto('table')
 
 var_dump($query);
 
-/**
- * SELECT TEST
- * 
- * @var Jayrods\QueryBuilder\SelectQueryBuilder
- */
+/** @var Jayrods\QueryBuilder\SelectQueryBuilder */
 $select = $builderFactory->create(QueryBuilderFactory::SELECT);
 
 $query = $select->selectFrom('tb1')
@@ -35,8 +27,8 @@ $query = $select->selectFrom('tb1')
     ->column('fourth', 'tb2')
     ->column('fifth', 'tb2')
     ->innerJoin('tb2', 'fifth', 'first', '=')
-    ->where('second', '=', 'SMTHELSE')
-    ->and('second', '<>', 'JUSTSMTH')
+    ->where('second', '=')
+    ->and('second', '<>')
     ->orderBy('first')
     ->asc()
     ->limit(10)
@@ -44,11 +36,7 @@ $query = $select->selectFrom('tb1')
 
 var_dump($query);
 
-/**
- * DELETE TEST
- * 
- * @var Jayrods\QueryBuilder\DeleteQueryBuilder
- */
+/** @var Jayrods\QueryBuilder\DeleteQueryBuilder */
 $delete = $builderFactory->create(QueryBuilderFactory::DELETE);
 
 $query = $delete->delete('table')
@@ -57,11 +45,7 @@ $query = $delete->delete('table')
 
 var_dump($query);
 
-/**
- * UPDATE TEST
- * 
- * @var Jayrods\QueryBuilder\UpdateQueryBuilder
- */
+/** @var Jayrods\QueryBuilder\UpdateQueryBuilder */
 $update = $builderFactory->create(QueryBuilderFactory::UPDATE);
 
 $query = $update->update('table')

@@ -1,8 +1,10 @@
 <?php
 
-namespace Jayrods\QueryBuilder;
+namespace Jayrods\QueryBuilder\Builders;
 
-abstract class QueryBuilder
+use Jayrods\QueryBuilder\Builders\QueryBuilderInterface;
+
+abstract class QueryBuilder implements QueryBuilderInterface
 {
     /**
      * Last built query. If no query was built, return empty string;
