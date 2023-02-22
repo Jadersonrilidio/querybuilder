@@ -2,62 +2,52 @@
 
 namespace Jayrods\QueryBuilder\Builders\Constrained;
 
-use Jayrods\QueryBuilder\Builders\QueryBuilderInterface;
-use Jayrods\QueryBuilder\Builders\Simple\SelectQueryBuilder;
-use Jayrods\QueryBuilder\Utils\MethodRecordHelper;
-use Jayrods\QueryBuilder\Utils\StateMachine;
+use Jayrods\QueryBuilder\Builders\Constrained\ConstrainedQueryBuilder;
+use Jayrods\QueryBuilder\Builders\Simple\SelectQueryBuilder as SimpleSelectQueryBuilder;
+use Jayrods\QueryBuilder\Exceptions\{
+    DuplicatedMethodCallException,
+    InvalidOperatorException,
+    RepeatedBinderNameException,
+    WrongStateMethodCallException
+};
+use Jayrods\QueryBuilder\Utils\Configuration;
 
-class ConstrainedSelectQueryBuilder implements QueryBuilderInterface
+class SelectQueryBuilder extends ConstrainedQueryBuilder
 {
-    private const STATE_ZERO = 0;
-    private const FIRST_STATE = 1;
-    private const SECOND_STATE = 2;
-
-    /**
-     * StateMachine instance.
-     * 
-     * @var StateMachine
-     */
-    private StateMachine $state;
-
-    /**
-     * StateMachine instance.
-     * 
-     * @var MethodRecordHelper
-     */
-    private MethodRecordHelper $methodRercord;
-
     /**
      * SelectQueryBuilder instance.
-     * 
-     * @var SelectQueryBuilder
+     *
+     * @var SimpleSelectQueryBuilder
      */
-    private SelectQueryBuilder $builder;
+    private SimpleSelectQueryBuilder $builder;
 
     /**
      * Class constructor.
-     * 
+     *
+     * @param Configuration $appConfig
+     *
      * @return void
      */
-    public function __construct()
+    public function __construct(Configuration $appConfig)
     {
-        $this->state = new StateMachine;
-        $this->methodRercord = new MethodRecordHelper;
-        $this->builder = new SelectQueryBuilder();
+        parent::__construct($appConfig);
+
+        $this->builder = new SimpleSelectQueryBuilder($appConfig);
     }
 
     /**
-     * Start building a query to select from into aimed table.
-     * 
+     * Start building SELECT FROM query.
+     *
      * @param string $table
-     * 
-     * @return ConstrainedSelectQueryBuilder
+     *
+     * @throws WrongStateMethodCallException
+     *
+     * @return SelectQueryBuilder
      */
     public function selectFrom(string $table): self
     {
         if (!$this->state->checkEquals(self::STATE_ZERO)) {
-            echo "WARNING: Method 'selectFrom' wrong calling order: machine already started." . PHP_EOL;
-            echo "NOTICE: Scaping 'selectFrom' method call." . PHP_EOL;
+            $this->errorHandler->wrongStateMethodCall(__METHOD__, 'Building proccess already started');
             return $this;
         }
 
@@ -71,18 +61,19 @@ class ConstrainedSelectQueryBuilder implements QueryBuilderInterface
     }
 
     /**
-     * Adds a column to be selected.
-     * 
+     * Add column to be selected.
+     *
      * @param string $column
      * @param ?string $refTable If the column comes from a relationship, thus the table name must be inserted.
-     * 
-     * @return ConstrainedSelectQueryBuilder
+     *
+     * @throws WrongStateMethodCallException
+     *
+     * @return SelectQueryBuilder
      */
     public function column(string $column, ?string $refTable = null): self
     {
         if (!$this->state->checkEquals(self::FIRST_STATE)) {
-            echo "WARNING: Method 'column' wrong calling order." . PHP_EOL;
-            echo "NOTICE: Scaping 'column' method call." . PHP_EOL;
+            $this->errorHandler->wrongStateMethodCall(__METHOD__);
             return $this;
         }
 
@@ -94,19 +85,20 @@ class ConstrainedSelectQueryBuilder implements QueryBuilderInterface
     }
 
     /**
-     * Adds a column with AS clause to be selected.
-     * 
+     * Add column with AS clause to be selected.
+     *
      * @param string $column
      * @param string $as
      * @param ?string $refTable If the column comes from a relationship, thus the table name must be inserted.
-     * 
-     * @return ConstrainedSelectQueryBuilder
+     *
+     * @throws WrongStateMethodCallException
+     *
+     * @return SelectQueryBuilder
      */
     public function columnAs(string $column, string $as, ?string $refTable = null): self
     {
         if (!$this->state->checkEquals(self::FIRST_STATE)) {
-            echo "WARNING: Method 'columnAs' wrong calling order." . PHP_EOL;
-            echo "NOTICE: Scaping 'columnAs' method call." . PHP_EOL;
+            $this->errorHandler->wrongStateMethodCall(__METHOD__);
             return $this;
         }
         $this->methodRercord->registerMethodCall(__METHOD__);
@@ -117,21 +109,20 @@ class ConstrainedSelectQueryBuilder implements QueryBuilderInterface
     }
 
     /**
-     * Starts a WHERE clause.
-     * 
+     * Start WHERE clause.
+     *
      * @param string $column
      * @param string $operator
      * @param ?string $binder
-     * 
-     * @throws InvalidOperatorException
-     * 
-     * @return ConstrainedSelectQueryBuilder
+     *
+     * @throws InvalidOperatorException|RepeatedBinderNameException|WrongStateMethodCallException
+     *
+     * @return SelectQueryBuilder
      */
     public function where(string $column, string $operator, ?string $binder = null): self
     {
         if (!$this->state->checkEquals(self::FIRST_STATE)) {
-            echo "WARNING: Method 'where' wrong calling order or WHERE clause already started." . PHP_EOL;
-            echo "NOTICE: Scaping 'where' method call." . PHP_EOL;
+            $this->errorHandler->wrongStateMethodCall(__METHOD__, 'Or WHERE clause already started');
             return $this;
         }
 
@@ -145,18 +136,19 @@ class ConstrainedSelectQueryBuilder implements QueryBuilderInterface
     }
 
     /**
-     * Starts a WHERE IN clause.
-     * 
+     * Start WHERE IN clause.
+     *
      * @param string $column
      * @param string $subquery
-     * 
-     * @return ConstrainedSelectQueryBuilder
+     *
+     * @throws RepeatedBinderNameException|WrongStateMethodCallException
+     *
+     * @return SelectQueryBuilder
      */
     public function whereIn(string $column, string $subquery): self
     {
         if (!$this->state->checkEquals(self::FIRST_STATE)) {
-            echo "WARNING: Method 'whereIn' wrong calling order or WHERE clause already started." . PHP_EOL;
-            echo "NOTICE: Scaping 'whereIn' method call." . PHP_EOL;
+            $this->errorHandler->wrongStateMethodCall(__METHOD__, 'Or WHERE clause already started');
             return $this;
         }
 
@@ -170,18 +162,19 @@ class ConstrainedSelectQueryBuilder implements QueryBuilderInterface
     }
 
     /**
-     * Starts a WHERE NOT IN clause.
-     * 
+     * Start WHERE NOT IN clause.
+     *
      * @param string $column
      * @param string $subquery
-     * 
-     * @return ConstrainedSelectQueryBuilder
+     *
+     * @throws RepeatedBinderNameException|WrongStateMethodCallException
+     *
+     * @return SelectQueryBuilder
      */
     public function whereNotIn(string $column, string $subquery): self
     {
         if (!$this->state->checkEquals(self::FIRST_STATE)) {
-            echo "WARNING: Method 'whereNotIn' wrong calling order or WHERE clause already started." . PHP_EOL;
-            echo "NOTICE: Scaping 'whereNotIn' method call." . PHP_EOL;
+            $this->errorHandler->wrongStateMethodCall(__METHOD__, 'Or WHERE clause already started');
             return $this;
         }
 
@@ -195,21 +188,20 @@ class ConstrainedSelectQueryBuilder implements QueryBuilderInterface
     }
 
     /**
-     * Starts a WHERE NOT clause.
-     * 
+     * Start WHERE NOT clause.
+     *
      * @param string $column
      * @param string $operator
      * @param ?string $binder
-     * 
-     * @throws InvalidOperatorException
-     * 
-     * @return ConstrainedSelectQueryBuilder
+     *
+     * @throws InvalidOperatorException|RepeatedBinderNameException|WrongStateMethodCallException
+     *
+     * @return SelectQueryBuilder
      */
     public function whereNot(string $column, string $operator, ?string $binder = null): self
     {
         if (!$this->state->checkEquals(self::FIRST_STATE)) {
-            echo "WARNING: Method 'whereNot' wrong calling order or WHERE clause already started." . PHP_EOL;
-            echo "NOTICE: Scaping 'whereNot' method call." . PHP_EOL;
+            $this->errorHandler->wrongStateMethodCall(__METHOD__, 'Or WHERE clause already started');
             return $this;
         }
 
@@ -223,19 +215,20 @@ class ConstrainedSelectQueryBuilder implements QueryBuilderInterface
     }
 
     /**
-     * Starts a WHERE BETWEEN clause.
-     * 
+     * Start WHERE BETWEEN clause.
+     *
      * @param string $column
      * @param ?string $left
      * @param ?string $right
-     * 
-     * @return ConstrainedSelectQueryBuilder
+     *
+     * @throws RepeatedBinderNameException|WrongStateMethodCallException
+     *
+     * @return SelectQueryBuilder
      */
     public function whereBetween(string $column, ?string $left = null, ?string $right = null): self
     {
         if (!$this->state->checkEquals(self::FIRST_STATE)) {
-            echo "WARNING: Method 'whereBetween' wrong calling order or WHERE clause already started." . PHP_EOL;
-            echo "NOTICE: Scaping 'whereBetween' method call." . PHP_EOL;
+            $this->errorHandler->wrongStateMethodCall(__METHOD__, 'Or WHERE clause already started');
             return $this;
         }
 
@@ -249,19 +242,20 @@ class ConstrainedSelectQueryBuilder implements QueryBuilderInterface
     }
 
     /**
-     * Starts a WHERE NOT BETWEEN clause.
-     * 
+     * Start WHERE NOT BETWEEN clause.
+     *
      * @param string $column
      * @param ?string $left
      * @param ?string $right
-     * 
-     * @return ConstrainedSelectQueryBuilder
+     *
+     * @throws RepeatedBinderNameException|WrongStateMethodCallException
+     *
+     * @return SelectQueryBuilder
      */
     public function whereNotBetween(string $column, ?string $left = null, ?string $right = null): self
     {
         if (!$this->state->checkEquals(self::FIRST_STATE)) {
-            echo "WARNING: Method 'whereNotBetween' wrong calling order or WHERE clause already started." . PHP_EOL;
-            echo "NOTICE: Scaping 'whereNotBetween' method call." . PHP_EOL;
+            $this->errorHandler->wrongStateMethodCall(__METHOD__, 'Or WHERE clause already started');
             return $this;
         }
 
@@ -275,21 +269,20 @@ class ConstrainedSelectQueryBuilder implements QueryBuilderInterface
     }
 
     /**
-     * Adds an AND clause to conditions.
-     * 
+     * Add AND clause to conditions.
+     *
      * @param string $column
      * @param string $operator
      * @param ?string $binder
-     * 
-     * @throws InvalidOperatorException
-     * 
-     * @return ConstrainedSelectQueryBuilder
+     *
+     * @throws InvalidOperatorException|RepeatedBinderNameException|WrongStateMethodCallException
+     *
+     * @return SelectQueryBuilder
      */
     public function and(string $column, string $operator, ?string $binder = null): self
     {
         if (!$this->state->checkEquals(self::SECOND_STATE)) {
-            echo "WARNING: Method 'and' wrong calling order. WHERE clause must already be started." . PHP_EOL;
-            echo "NOTICE: Scaping 'and' method call." . PHP_EOL;
+            $this->errorHandler->wrongStateMethodCall(__METHOD__, 'Must start WHERE clause first');
             return $this;
         }
 
@@ -301,21 +294,20 @@ class ConstrainedSelectQueryBuilder implements QueryBuilderInterface
     }
 
     /**
-     * Adds an AND NOT clause to conditions.
-     * 
+     * Add AND NOT clause to conditions.
+     *
      * @param string $column
      * @param string $operator
      * @param ?string $binder
-     * 
-     * @throws InvalidOperatorException
-     * 
-     * @return ConstrainedSelectQueryBuilder
+     *
+     * @throws InvalidOperatorException|RepeatedBinderNameException|WrongStateMethodCallException
+     *
+     * @return SelectQueryBuilder
      */
     public function andNot(string $column, string $operator, ?string $binder = null): self
     {
         if (!$this->state->checkEquals(self::SECOND_STATE)) {
-            echo "WARNING: Method 'andNot' wrong calling order. WHERE clause must already be started." . PHP_EOL;
-            echo "NOTICE: Scaping 'andNot' method call." . PHP_EOL;
+            $this->errorHandler->wrongStateMethodCall(__METHOD__, 'Must start WHERE clause first');
             return $this;
         }
 
@@ -327,19 +319,20 @@ class ConstrainedSelectQueryBuilder implements QueryBuilderInterface
     }
 
     /**
-     * Adds an AND BETWEEN clause to conditions.
-     * 
+     * Add AND BETWEEN clause to conditions.
+     *
      * @param string $column
      * @param ?string $left
      * @param ?string $right
-     * 
-     * @return ConstrainedSelectQueryBuilder
+     *
+     * @throws RepeatedBinderNameException|WrongStateMethodCallException
+     *
+     * @return SelectQueryBuilder
      */
     public function andBetween(string $column, ?string $left = null, ?string $right = null): self
     {
         if (!$this->state->checkEquals(self::SECOND_STATE)) {
-            echo "WARNING: Method 'andBetween' wrong calling order. WHERE clause must already be started." . PHP_EOL;
-            echo "NOTICE: Scaping 'andBetween' method call." . PHP_EOL;
+            $this->errorHandler->wrongStateMethodCall(__METHOD__, 'Must start WHERE clause first');
             return $this;
         }
 
@@ -351,19 +344,20 @@ class ConstrainedSelectQueryBuilder implements QueryBuilderInterface
     }
 
     /**
-     * Adds an AND NOT BETWEEN clause to conditions.
-     * 
+     * Add AND NOT BETWEEN clause to conditions.
+     *
      * @param string $column
      * @param ?string $left
      * @param ?string $right
-     * 
-     * @return ConstrainedSelectQueryBuilder
+     *
+     * @throws RepeatedBinderNameException|WrongStateMethodCallException
+     *
+     * @return SelectQueryBuilder
      */
     public function andNotBetween(string $column, ?string $left = null, ?string $right = null): self
     {
         if (!$this->state->checkEquals(self::SECOND_STATE)) {
-            echo "WARNING: Method 'andNotBetween' wrong calling order. WHERE clause must already be started." . PHP_EOL;
-            echo "NOTICE: Scaping 'andNotBetween' method call." . PHP_EOL;
+            $this->errorHandler->wrongStateMethodCall(__METHOD__, 'Must start WHERE clause first');
             return $this;
         }
 
@@ -375,21 +369,20 @@ class ConstrainedSelectQueryBuilder implements QueryBuilderInterface
     }
 
     /**
-     * Adds an OR clause to conditions.
-     * 
+     * Add OR clause to conditions.
+     *
      * @param string $column
      * @param string $operator
      * @param ?string $binder
-     * 
-     * @throws InvalidOperatorException
-     * 
-     * @return ConstrainedSelectQueryBuilder
+     *
+     * @throws InvalidOperatorException|RepeatedBinderNameException|WrongStateMethodCallException
+     *
+     * @return SelectQueryBuilder
      */
     public function or(string $column, string $operator, ?string $binder = null): self
     {
         if (!$this->state->checkEquals(self::SECOND_STATE)) {
-            echo "WARNING: Method 'or' wrong calling order. WHERE clause must already be started." . PHP_EOL;
-            echo "NOTICE: Scaping 'or' method call." . PHP_EOL;
+            $this->errorHandler->wrongStateMethodCall(__METHOD__, 'Must start WHERE clause first');
             return $this;
         }
 
@@ -401,21 +394,20 @@ class ConstrainedSelectQueryBuilder implements QueryBuilderInterface
     }
 
     /**
-     * Adds an OR NOT clause to conditions.
-     * 
+     * Add OR NOT clause to conditions.
+     *
      * @param string $column
      * @param string $operator
      * @param ?string $binder
-     * 
-     * @throws InvalidOperatorException
-     * 
-     * @return ConstrainedSelectQueryBuilder
+     *
+     * @throws InvalidOperatorException|RepeatedBinderNameException|WrongStateMethodCallException
+     *
+     * @return SelectQueryBuilder
      */
     public function orNot(string $column, string $operator, ?string $binder = null): self
     {
         if (!$this->state->checkEquals(self::SECOND_STATE)) {
-            echo "WARNING: Method 'orNot' wrong calling order. WHERE clause must already be started." . PHP_EOL;
-            echo "NOTICE: Scaping 'orNot' method call." . PHP_EOL;
+            $this->errorHandler->wrongStateMethodCall(__METHOD__, 'Must start WHERE clause first');
             return $this;
         }
 
@@ -427,19 +419,20 @@ class ConstrainedSelectQueryBuilder implements QueryBuilderInterface
     }
 
     /**
-     * Adds an OR BETWEEN clause to conditions.
-     * 
+     * Add OR BETWEEN clause to conditions.
+     *
      * @param string $column
      * @param ?string $left
      * @param ?string $right
-     * 
-     * @return ConstrainedSelectQueryBuilder
+     *
+     * @throws RepeatedBinderNameException|WrongStateMethodCallException
+     *
+     * @return SelectQueryBuilder
      */
     public function orBetween(string $column, ?string $left = null, ?string $right = null): self
     {
         if (!$this->state->checkEquals(self::SECOND_STATE)) {
-            echo "WARNING: Method 'orBetween' wrong calling order. WHERE clause must already be started." . PHP_EOL;
-            echo "NOTICE: Scaping 'orBetween' method call." . PHP_EOL;
+            $this->errorHandler->wrongStateMethodCall(__METHOD__, 'Must start WHERE clause first');
             return $this;
         }
 
@@ -451,19 +444,20 @@ class ConstrainedSelectQueryBuilder implements QueryBuilderInterface
     }
 
     /**
-     * Adds an OR NOT BETWEEN clause to conditions.
-     * 
+     * Add OR NOT BETWEEN clause to conditions.
+     *
      * @param string $column
      * @param ?string $left
      * @param ?string $right
-     * 
-     * @return ConstrainedSelectQueryBuilder
+     *
+     * @throws RepeatedBinderNameException|WrongStateMethodCallException
+     *
+     * @return SelectQueryBuilder
      */
     public function orNotBetween(string $column, ?string $left = null, ?string $right = null): self
     {
         if (!$this->state->checkEquals(self::SECOND_STATE)) {
-            echo "WARNING: Method 'orNotBetween' wrong calling order. WHERE clause must already be started." . PHP_EOL;
-            echo "NOTICE: Scaping 'orNotBetween' method call." . PHP_EOL;
+            $this->errorHandler->wrongStateMethodCall(__METHOD__, 'Must start WHERE clause first');
             return $this;
         }
 
@@ -475,23 +469,23 @@ class ConstrainedSelectQueryBuilder implements QueryBuilderInterface
     }
 
     /**
-     * Set the LIMIT of results.
-     * 
+     * Add LIMIT clause.
+     *
      * @param int $limit
-     * 
-     * @return ConstrainedSelectQueryBuilder
+     *
+     * @throws DuplicatedMethodCallException|WrongStateMethodCallException
+     *
+     * @return SelectQueryBuilder
      */
     public function limit(int $limit): self
     {
         if (!$this->state->checkEquals(self::FIRST_STATE, self::SECOND_STATE)) {
-            echo "WARNING: Method 'limit' wrong calling order" . PHP_EOL;
-            echo "NOTICE: Scaping 'limit' method call." . PHP_EOL;
+            $this->errorHandler->wrongStateMethodCall(__METHOD__);
             return $this;
         }
 
         if ($this->methodRercord->methodCalledOnce(__METHOD__)) {
-            echo "WARNING: LIMIT clause is already set." . PHP_EOL;
-            echo "NOTICE: Scaping 'limit' method call." . PHP_EOL;
+            $this->errorHandler->duplicatedMethodCall(__METHOD__, 'LIMIT clause already set');
             return $this;
         }
 
@@ -503,23 +497,23 @@ class ConstrainedSelectQueryBuilder implements QueryBuilderInterface
     }
 
     /**
-     * Set the ORDER BY clause.
-     * 
+     * Add ORDER BY clause.
+     *
      * @param string $column
-     * 
-     * @return ConstrainedSelectQueryBuilder
+     *
+     * @throws DuplicatedMethodCallException|WrongStateMethodCallException
+     *
+     * @return SelectQueryBuilder
      */
     public function orderBy(string $column): self
     {
         if (!$this->state->checkEquals(self::FIRST_STATE, self::SECOND_STATE)) {
-            echo "WARNING: Method 'orderBy' wrong calling order." . PHP_EOL;
-            echo "NOTICE: Scaping 'orderBy' method call." . PHP_EOL;
+            $this->errorHandler->wrongStateMethodCall(__METHOD__);
             return $this;
         }
 
         if ($this->methodRercord->methodCalledOnce(__METHOD__)) {
-            echo "WARNING: ORDER BY clause already set." . PHP_EOL;
-            echo "NOTICE: Scaping 'orderBy' method call." . PHP_EOL;
+            $this->errorHandler->duplicatedMethodCall(__METHOD__, 'ORDER BY clause already set');
             return $this;
         }
 
@@ -532,20 +526,20 @@ class ConstrainedSelectQueryBuilder implements QueryBuilderInterface
 
     /**
      * Sort the result order ascending.
-     * 
-     * @return ConstrainedSelectQueryBuilder
+     *
+     * @throws DuplicatedMethodCallException|WrongStateMethodCallException
+     *
+     * @return SelectQueryBuilder
      */
     public function asc(): self
     {
         if (!$this->state->checkEquals(self::FIRST_STATE, self::SECOND_STATE)) {
-            echo "WARNING: Method 'asc' wrong calling order." . PHP_EOL;
-            echo "NOTICE: Scaping 'asc' method call." . PHP_EOL;
+            $this->errorHandler->wrongStateMethodCall(__METHOD__);
             return $this;
         }
 
         if ($this->methodRercord->methodCalledOnce(__METHOD__, 'desc')) {
-            echo "WARNING: sorting order clause already set." . PHP_EOL;
-            echo "NOTICE: Scaping 'asc' method call." . PHP_EOL;
+            $this->errorHandler->duplicatedMethodCall(__METHOD__, 'sorting order already set');
             return $this;
         }
 
@@ -558,20 +552,20 @@ class ConstrainedSelectQueryBuilder implements QueryBuilderInterface
 
     /**
      * Sort the result order descending.
-     * 
-     * @return ConstrainedSelectQueryBuilder
+     *
+     * @throws DuplicatedMethodCallException|WrongStateMethodCallException
+     *
+     * @return SelectQueryBuilder
      */
     public function desc(): self
     {
         if (!$this->state->checkEquals(self::FIRST_STATE, self::SECOND_STATE)) {
-            echo "WARNING: Method 'desc' wrong calling order." . PHP_EOL;
-            echo "NOTICE: Scaping 'desc' method call." . PHP_EOL;
+            $this->errorHandler->wrongStateMethodCall(__METHOD__);
             return $this;
         }
 
         if ($this->methodRercord->methodCalledOnce(__METHOD__, 'asc')) {
-            echo "WARNING: sorting order clause already set." . PHP_EOL;
-            echo "NOTICE: Scaping 'desc' method call." . PHP_EOL;
+            $this->errorHandler->duplicatedMethodCall(__METHOD__, 'sorting order already set');
             return $this;
         }
 
@@ -583,35 +577,86 @@ class ConstrainedSelectQueryBuilder implements QueryBuilderInterface
     }
 
     /**
-     * Adds an INNER JOIN clause.
-     * 
+     * Add INNER JOIN clause.
+     *
      * @param string $joinTable
      * @param string $columnTable
-     * @param string $columnJoinTable
      * @param string $operator
-     * 
-     * @throws InvalidOperatorException
-     * 
-     * @return ConstrainedSelectQueryBuilder
+     * @param string $columnJoinTable
+     *
+     * @throws InvalidOperatorException|WrongStateMethodCallException
+     *
+     * @return SelectQueryBuilder
      */
-    public function innerJoin(string $joinTable, string $columnTable, string $columnJoinTable,  string $operator): self
+    public function innerJoin(string $joinTable, string $columnTable, string $operator, string $columnJoinTable): self
     {
         if (!$this->state->checkEquals(self::FIRST_STATE)) {
-            echo "WARNING: Method 'innerJoin' wrong calling order." . PHP_EOL;
-            echo "NOTICE: Scaping 'innerJoin' method call." . PHP_EOL;
+            $this->errorHandler->wrongStateMethodCall(__METHOD__);
             return $this;
         }
 
         $this->methodRercord->registerMethodCall(__METHOD__);
 
-        $this->builder->innerJoin($joinTable, $columnTable, $columnJoinTable, $operator);
+        $this->builder->innerJoin($joinTable, $columnTable, $operator, $columnJoinTable);
 
         return $this;
     }
 
     /**
-     * Return the built query and reset the paratemers to default value.
-     * 
+     * Add LEFT JOIN clause.
+     *
+     * @param string $joinTable
+     * @param string $columnTable
+     * @param string $operator
+     * @param string $columnJoinTable
+     *
+     * @throws InvalidOperatorException|WrongStateMethodCallException
+     *
+     * @return SelectQueryBuilder
+     */
+    public function leftJoin(string $joinTable, string $columnTable, string $operator, string $columnJoinTable): self
+    {
+        if (!$this->state->checkEquals(self::FIRST_STATE)) {
+            $this->errorHandler->wrongStateMethodCall(__METHOD__);
+            return $this;
+        }
+
+        $this->methodRercord->registerMethodCall(__METHOD__);
+
+        $this->builder->leftJoin($joinTable, $columnTable, $operator, $columnJoinTable);
+
+        return $this;
+    }
+
+    /**
+     * Add RIGHT JOIN clause.
+     *
+     * @param string $joinTable
+     * @param string $columnTable
+     * @param string $operator
+     * @param string $columnJoinTable
+     *
+     * @throws InvalidOperatorException|WrongStateMethodCallException
+     *
+     * @return SelectQueryBuilder
+     */
+    public function rightJoin(string $joinTable, string $columnTable, string $operator, string $columnJoinTable): self
+    {
+        if (!$this->state->checkEquals(self::FIRST_STATE)) {
+            $this->errorHandler->wrongStateMethodCall(__METHOD__);
+            return $this;
+        }
+
+        $this->methodRercord->registerMethodCall(__METHOD__);
+
+        $this->builder->rightJoin($joinTable, $columnTable, $operator, $columnJoinTable);
+
+        return $this;
+    }
+
+    /**
+     * Return the built query and reset all attributes and helpers to default value.
+     *
      * @return string The SQL query.
      */
     public function build(): string
@@ -624,7 +669,7 @@ class ConstrainedSelectQueryBuilder implements QueryBuilderInterface
 
     /**
      * Return the last built query or empty string.
-     * 
+     *
      * @return string
      */
     public function query(): string

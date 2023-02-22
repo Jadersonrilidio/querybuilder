@@ -2,340 +2,371 @@
 
 namespace Jayrods\QueryBuilder\Builders\Simple;
 
-use Jayrods\QueryBuilder\Exceptions\InvalidOperatorException;
-use Jayrods\QueryBuilder\Builders\QueryBuilder;
+use Jayrods\QueryBuilder\Exceptions\{InvalidOperatorException, RepeatedBinderNameException};
+use Jayrods\QueryBuilder\Builders\Simple\SimpleQueryBuilder;
 use Jayrods\QueryBuilder\Traits\ValidateOperator;
 
-class UpdateQueryBuilder extends QueryBuilder
+class UpdateQueryBuilder extends SimpleQueryBuilder
 {
     use ValidateOperator;
 
     /**
      * Table Name.
-     * 
+     *
      * @var string
      */
-    private string $table;
+    private string $table = '';
 
     /**
-     * Columns to be selected.
-     * 
+     * Columns to be updated.
+     *
      * @var string
      */
     private string $columns = '';
 
     /**
-     * Conditions clauses.
-     * 
+     * Condition clauses.
+     *
      * @var string
      */
     private string $conditions = '';
 
     /**
-     * Start building a query to select from into aimed table.
-     * 
+     * Start building UPDATE query.
+     *
      * @param string $table
-     * 
+     *
      * @return UpdateQueryBuilder
      */
     public function update(string $table): self
     {
         $this->table = $table;
+
         return $this;
     }
 
     /**
-     * Adds a column to be selected.
-     * 
+     * Add column to be updated with respective binder name.
+     *
      * @param string $column
      * @param ?string $binder
-     * 
+     *
+     * @throws RepeatedBinderNameException
+     *
      * @return UpdateQueryBuilder
      */
     public function column(string $column, ?string $binder = null): self
     {
-        $binder = $binder ?? $column;
+        $binder = $this->bindHandler->handle($binder ?? $column);
 
-        $this->columns .= "$column = :$binder, ";
+        $this->columns .= "$column = $binder, ";
+
         return $this;
     }
 
     /**
-     * Starts a WHERE clause.
-     * 
+     * Start WHERE clause.
+     *
      * @param string $column
      * @param string $operator
      * @param ?string $binder
-     * 
-     * @throws InvalidOperatorException
-     * 
+     *
+     * @throws InvalidOperatorException|RepeatedBinderNameException
+     *
      * @return UpdateQueryBuilder
      */
     public function where(string $column, string $operator, ?string $binder = null): self
     {
         if (!$this->isValidOperator($operator)) {
-            throw new InvalidOperatorException('Invalid operator signal');
+            throw new InvalidOperatorException($operator);
         }
-        $binder = $binder ?? "$column";
 
-        $this->conditions = "WHERE $column $operator :$binder";
+        $binder = $this->bindHandler->handle($binder ?? $column);
+
+        $this->conditions = "WHERE $column $operator $binder";
+
         return $this;
     }
 
     /**
-     * Starts a WHERE IN clause.
-     * 
+     * Start WHERE IN clause.
+     *
      * @param string $column
      * @param string $subquery
-     * 
+     *
      * @return UpdateQueryBuilder
      */
     public function whereIn(string $column, string $subquery): self
     {
         $this->conditions = "WHERE $column IN ($subquery)";
+
         return $this;
     }
 
     /**
-     * Starts a WHERE NOT IN clause.
-     * 
+     * Start WHERE NOT IN clause.
+     *
      * @param string $column
      * @param string $subquery
-     * 
+     *
      * @return UpdateQueryBuilder
      */
     public function whereNotIn(string $column, string $subquery): self
     {
         $this->conditions = "WHERE $column NOT IN ($subquery)";
+
         return $this;
     }
 
     /**
-     * Starts a WHERE NOT clause.
-     * 
+     * Start WHERE NOT clause.
+     *
      * @param string $column
      * @param string $operator
      * @param ?string $binder
-     * 
-     * @throws InvalidOperatorException
-     * 
+     *
+     * @throws InvalidOperatorException|RepeatedBinderNameException
+     *
      * @return UpdateQueryBuilder
      */
     public function whereNot(string $column, string $operator, ?string $binder = null): self
     {
         if (!$this->isValidOperator($operator)) {
-            throw new InvalidOperatorException('Invalid operator signal');
+            throw new InvalidOperatorException($operator);
         }
 
-        $binder = $binder ?? "$column";
+        $binder = $this->bindHandler->handle($binder ?? $column);
 
-        $this->conditions = "WHERE NOT $column $operator :$binder";
+        $this->conditions = "WHERE NOT $column $operator $binder";
+
         return $this;
     }
 
     /**
-     * Starts a WHERE BETWEEN clause.
-     * 
+     * Start WHERE BETWEEN clause.
+     *
      * @param string $column
      * @param ?string $left
      * @param ?string $right
-     * 
+     *
+     * @throws RepeatedBinderNameException
+     *
      * @return UpdateQueryBuilder
      */
     public function whereBetween(string $column, ?string $left = null, ?string $right = null): self
     {
-        $left = $left ?? "{$column}_left";
-        $right = $right ?? "{$column}_right";
+        $left = $this->bindHandler->handle($left ?? "{$column}_left");
+        $right = $this->bindHandler->handle($right ?? "{$column}_right");
 
-        $this->conditions = "WHERE $column BETWEEN :$left AND :$right";
+        $this->conditions = "WHERE $column BETWEEN $left AND $right";
+
         return $this;
     }
 
     /**
-     * Starts a WHERE NOT BETWEEN clause.
-     * 
+     * Start WHERE NOT BETWEEN clause.
+     *
      * @param string $column
      * @param ?string $left
      * @param ?string $right
-     * 
+     *
+     * @throws RepeatedBinderNameException
+     *
      * @return UpdateQueryBuilder
      */
     public function whereNotBetween(string $column, ?string $left = null, ?string $right = null): self
     {
-        $left = $left ?? "{$column}_left";
-        $right = $right ?? "{$column}_right";
+        $left = $this->bindHandler->handle($left ?? "{$column}_left");
+        $right = $this->bindHandler->handle($right ?? "{$column}_right");
 
-        $this->conditions = "WHERE $column NOT BETWEEN :$left AND :$right";
+        $this->conditions = "WHERE $column NOT BETWEEN $left AND $right";
+
         return $this;
     }
 
     /**
-     * Adds an AND clause to conditions.
-     * 
+     * Add AND clause to conditions.
+     *
      * @param string $column
      * @param string $operator
      * @param ?string $binder
-     * 
-     * @throws InvalidOperatorException
-     * 
+     *
+     * @throws InvalidOperatorException|RepeatedBinderNameException
+     *
      * @return UpdateQueryBuilder
      */
     public function and(string $column, string $operator, ?string $binder = null): self
     {
         if (!$this->isValidOperator($operator)) {
-            throw new InvalidOperatorException('Invalid operator signal');
+            throw new InvalidOperatorException($operator);
         }
 
-        $binder = $binder ?? "$column";
+        $binder = $this->bindHandler->handle($binder ?? $column);
 
-        $this->conditions .= " AND $column $operator :$binder";
+        $this->conditions .= " AND $column $operator $binder";
+
         return $this;
     }
 
     /**
-     * Adds an AND NOT clause to conditions.
-     * 
+     * Add AND NOT clause to conditions.
+     *
      * @param string $column
      * @param string $operator
      * @param ?string $binder
-     * 
-     * @throws InvalidOperatorException
-     * 
+     *
+     * @throws InvalidOperatorException|RepeatedBinderNameException
+     *
      * @return UpdateQueryBuilder
      */
     public function andNot(string $column, string $operator, ?string $binder = null): self
     {
         if (!$this->isValidOperator($operator)) {
-            throw new InvalidOperatorException('Invalid operator signal');
+            throw new InvalidOperatorException($operator);
         }
 
-        $binder = $binder ?? "$column";
+        $binder = $this->bindHandler->handle($binder ?? $column);
 
-        $this->conditions .= " AND NOT $column $operator :$binder";
+        $this->conditions .= " AND NOT $column $operator $binder";
+
         return $this;
     }
 
     /**
-     * Adds an AND BETWEEN clause to conditions.
-     * 
+     * Add AND BETWEEN clause to conditions.
+     *
      * @param string $column
      * @param ?string $left
      * @param ?string $right
-     * 
+     *
+     * @throws RepeatedBinderNameException
+     *
      * @return UpdateQueryBuilder
      */
     public function andBetween(string $column, ?string $left = null, ?string $right = null): self
     {
-        $left = $left ?? "{$column}_left";
-        $right = $right ?? "{$column}_right";
+        $left = $this->bindHandler->handle($left ?? "{$column}_left");
+        $right = $this->bindHandler->handle($right ?? "{$column}_right");
 
-        $this->conditions .= " AND $column BETWEEN :$left AND :$right";
+        $this->conditions .= " AND $column BETWEEN $left AND $right";
+
         return $this;
     }
 
     /**
-     * Adds an AND NOT BETWEEN clause to conditions.
-     * 
+     * Add AND NOT BETWEEN clause to conditions.
+     *
      * @param string $column
      * @param ?string $left
      * @param ?string $right
-     * 
+     *
+     * @throws RepeatedBinderNameException
+     *
      * @return UpdateQueryBuilder
      */
     public function andNotBetween(string $column, ?string $left = null, ?string $right = null): self
     {
-        $left = $left ?? "{$column}_left";
-        $right = $right ?? "{$column}_right";
+        $left = $this->bindHandler->handle($left ?? "{$column}_left");
+        $right = $this->bindHandler->handle($right ?? "{$column}_right");
 
-        $this->conditions .= " AND $column NOT BETWEEN :$left AND :$right";
+        $this->conditions .= " AND $column NOT BETWEEN $left AND $right";
+
         return $this;
     }
 
     /**
-     * Adds an OR clause to conditions.
-     * 
+     * Add OR clause to conditions.
+     *
      * @param string $column
      * @param string $operator
      * @param ?string $binder
-     * 
-     * @throws InvalidOperatorException
-     * 
+     *
+     * @throws InvalidOperatorException|RepeatedBinderNameException
+     *
      * @return UpdateQueryBuilder
      */
     public function or(string $column, string $operator, ?string $binder = null): self
     {
         if (!$this->isValidOperator($operator)) {
-            throw new InvalidOperatorException('Invalid operator signal');
+            throw new InvalidOperatorException($operator);
         }
 
-        $binder = $binder ?? "$column";
+        $binder = $this->bindHandler->handle($binder ?? $column);
 
-        $this->conditions .= " OR $column $operator :$binder";
+        $this->conditions .= " OR $column $operator $binder";
+
         return $this;
     }
 
     /**
-     * Adds an OR NOT clause to conditions.
-     * 
+     * Add OR NOT clause to conditions.
+     *
      * @param string $column
      * @param string $operator
      * @param ?string $binder
-     * 
-     * @throws InvalidOperatorException
-     * 
+     *
+     * @throws InvalidOperatorException|RepeatedBinderNameException
+     *
      * @return UpdateQueryBuilder
      */
     public function orNot(string $column, string $operator, ?string $binder = null): self
     {
         if (!$this->isValidOperator($operator)) {
-            throw new InvalidOperatorException('Invalid operator signal');
+            throw new InvalidOperatorException($operator);
         }
 
-        $binder = $binder ?? "$column";
+        $binder = $this->bindHandler->handle($binder ?? $column);
 
-        $this->conditions .= " OR NOT $column $operator :$binder";
+        $this->conditions .= " OR NOT $column $operator $binder";
+
         return $this;
     }
 
     /**
-     * Adds an OR BETWEEN clause to conditions.
-     * 
+     * Add OR BETWEEN clause to conditions.
+     *
      * @param string $column
      * @param ?string $left
      * @param ?string $right
-     * 
+     *
+     * @throws RepeatedBinderNameException
+     *
      * @return UpdateQueryBuilder
      */
     public function orBetween(string $column, ?string $left = null, ?string $right = null): self
     {
-        $left = $left ?? "{$column}_left";
-        $right = $right ?? "{$column}_right";
+        $left = $this->bindHandler->handle($left ?? "{$column}_left");
+        $right = $this->bindHandler->handle($right ?? "{$column}_right");
 
-        $this->conditions .= " OR $column NOT BETWEEN :$left AND :$right";
+        $this->conditions .= " OR $column NOT BETWEEN $left AND $right";
+
         return $this;
     }
 
     /**
-     * Adds an OR NOT BETWEEN clause to conditions.
-     * 
+     * Add OR NOT BETWEEN clause to conditions.
+     *
      * @param string $column
      * @param ?string $left
      * @param ?string $right
-     * 
+     *
+     * @throws RepeatedBinderNameException
+     *
      * @return UpdateQueryBuilder
      */
     public function orNotBetween(string $column, ?string $left = null, ?string $right = null): self
     {
-        $left = $left ?? "{$column}_left";
-        $right = $right ?? "{$column}_right";
+        $left = $this->bindHandler->handle($left ?? "{$column}_left");
+        $right = $this->bindHandler->handle($right ?? "{$column}_right");
 
-        $this->conditions .= " OR $column NOT BETWEEN :$left AND :$right";
+        $this->conditions .= " OR $column NOT BETWEEN $left AND $right";
+
         return $this;
     }
 
     /**
      * Build the query and set it to the query attribute.
-     * 
+     *
      * @return void
      */
     protected function queryBuild(): void
@@ -347,13 +378,13 @@ class UpdateQueryBuilder extends QueryBuilder
     }
 
     /**
-     * Resets build-related attributes to default values.
-     * 
+     * Resets build-related attributes and helpers to default values.
+     *
      * @return void
      */
     protected function reset(): void
     {
-        unset($this->table);
-        $this->columns = $this->conditions = '';
+        $this->bindHandler->reset();
+        $this->table = $this->columns = $this->conditions = '';
     }
 }

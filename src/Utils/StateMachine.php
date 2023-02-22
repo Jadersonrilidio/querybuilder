@@ -5,12 +5,18 @@ namespace Jayrods\QueryBuilder\Utils;
 class StateMachine
 {
     /**
+     * Current state.
+     *
      * @var int
      */
     private int $state = 0;
 
     /**
-     * 
+     * Class constructor.
+     *
+     * @param int $state
+     *
+     * @return void
      */
     public function __construct(int $state = 0)
     {
@@ -18,7 +24,9 @@ class StateMachine
     }
 
     /**
-     * 
+     * Increase state value by one.
+     *
+     * @return void
      */
     public function up(): void
     {
@@ -26,15 +34,9 @@ class StateMachine
     }
 
     /**
-     * 
-     */
-    public function down(): void
-    {
-        $this->state--;
-    }
-
-    /**
-     * 
+     * Reset state value to zero.
+     *
+     * @return void
      */
     public function reset(): void
     {
@@ -42,15 +44,11 @@ class StateMachine
     }
 
     /**
-     * 
-     */
-    public function set(int $state): void
-    {
-        $this->state = $state;
-    }
-
-    /**
-     * 
+     * Check whether a list of state values matches with current state.
+     *
+     * @param int $states
+     *
+     * @return bool
      */
     public function checkEquals(int ...$states): bool
     {

@@ -1,5 +1,5 @@
 _trash
 vendor
-bin
 tests
 .env
+.phan

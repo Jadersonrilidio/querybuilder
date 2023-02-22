@@ -1,7 +1,14 @@
 {
     "name": "jayrods/query-builder",
-    "type": "library",
     "description": "Simple query builder to ease SQL query writing",
+    "type": "library",
+    "keywords": [
+        "sql",
+        "query",
+        "queryBuilder",
+        "jayrods"
+    ],
+    "license": "GPL-3.0-or-later",
     "authors": [
         {
             "name": "Jaderson Rodrigues",
@@ -9,26 +16,44 @@
             "homepage": "https://www.github.com/Jadersonrilidio"
         }
     ],
-    "license": "GPL-3.0-or-later",
     "autoload": {
-        "files": [
-            "./functions/env.php"
-        ],
         "psr-4": {
             "Jayrods\\QueryBuilder\\": "src/"
         }
     },
-    "autoload-dev": {
-        "psr-4": {
-            "Jayrods\\QueryBuilder\\Tests\\": "tests/"
-        }
+    "require": {
+        "php": "^7.4 || ^8.0",
+        "vlucas/phpdotenv": "^5.5"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.7",
+        "phan/phan": "^5.4"
+    },
+    "suggest": {
+        "vlucas/phpdotenv": "Allows safer environment variables setting"
     },
     "scripts": {
         "proc-test": "php tests/development-test.php",
-        "make-class": "php bin/make_class"
+        "qb-publish-config": "php bin/qb_publish_config",
+        "cbf": "vendor/bin/phpcbf --standard=PSR12 src/",
+        "cs": "vendor/bin/phpcs --standard=PSR12 src/",
+        "phan": "vendor/bin/phan --allow-polyfill-parser",
+        "deploy-check": [
+            "@phan",
+            "@cbf",
+            "@cs",
+            "@proc-test"
+        ]
     },
     "scripts-descriptions": {
-        "proc-test": "Run a simple test script in procedural PHP",
-        "make-class": "Autogenerates a class on 'src/' using the default namespace."
-    }
+        "proc-test": "Run a simple test script in procedural PHP.",
+        "qb-publish-config": "Publishes the queryBuilderConfig file for user definition.",
+        "cbf": "",
+        "cs": "",
+        "phan": "",
+        "deploy-check": ""
+    },
+    "bin": [
+        "qb_publish_config"
+    ]
 }

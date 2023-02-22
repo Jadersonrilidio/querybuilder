@@ -5,12 +5,18 @@ namespace Jayrods\QueryBuilder\Utils;
 class MethodRecordHelper
 {
     /**
+     * Array containing called methods' names as key and called times as value.
+     *
      * @var int[]
      */
     private array $methodsCall = array();
 
     /**
+     * Register a method call.
+     *
      * @param string $method It is strongly encouraged to use __METHOD__ magic constant as argument.
+     *
+     * @return void
      */
     public function registerMethodCall(string $method): void
     {
@@ -24,17 +30,11 @@ class MethodRecordHelper
     }
 
     /**
-     * @param string $method It is strongly encouraged to use __METHOD__ magic constant as argument.
-     */
-    public function methodCallAmount(string $method): int
-    {
-        $method = $this->parseMethodName($method);
-
-        return $this->methodsCall[$method] ?? 0;
-    }
-
-    /**
-     * @param string[] $method It is strongly encouraged to use __METHOD__ magic constant as argument.
+     * Check whether a list of methods' names where called at least once or not.
+     *
+     * @param string $methods It is strongly encouraged to use __METHOD__ magic constant as argument.
+     *
+     * @return bool
      */
     public function methodCalledOnce(string ...$methods): bool
     {
@@ -50,8 +50,8 @@ class MethodRecordHelper
     }
 
     /**
-     * @param string $method It is strongly encouraged to use __METHOD__ magic constant as argument.
-     * 
+     * Return associative array of called methods with names as key and called times as value.
+     *
      * @return int[]
      */
     public function methodsCall(): array
@@ -60,7 +60,9 @@ class MethodRecordHelper
     }
 
     /**
-     * 
+     * Reset list of called methods to empty.
+     *
+     * @return void
      */
     public function resetMethodsCall(): void
     {
@@ -68,7 +70,11 @@ class MethodRecordHelper
     }
 
     /**
-     * 
+     * Parse provided method's name from it's namespace and return plain method name.
+     *
+     * @param string $method It is strongly encouraged to use __METHOD__ magic constant as argument.
+     *
+     * @return string Plain method name.
      */
     private function parseMethodName(string $method): string
     {

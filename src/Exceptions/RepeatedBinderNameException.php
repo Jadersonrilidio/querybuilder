@@ -5,12 +5,13 @@ namespace Jayrods\QueryBuilder\Exceptions;
 use DomainException;
 use Throwable;
 
-class InvalidOperatorException extends DomainException
+class RepeatedBinderNameException extends DomainException
 {
     /**
      * Class Constructor.
      *
-     * @param string $operator
+     * @param string $binder
+     * @param int $count
      * @param string $message
      * @param int $code
      * @param ?Throwable $previous
@@ -18,13 +19,14 @@ class InvalidOperatorException extends DomainException
      * @return void
      */
     public function __construct(
-        string $operator,
+        string $binder,
+        int $count,
         string $message = '',
         int $code = 0,
         ?Throwable $previous = null
     ) {
         if ($message === '') {
-            $message = $this->editMessage($operator);
+            $message = $this->editMessage($binder, $count);
         }
 
         parent::__construct($message, $code, $previous);
@@ -33,12 +35,13 @@ class InvalidOperatorException extends DomainException
     /**
      * Edit and return exception message.
      *
-     * @param string $operator
+     * @param string $binder
+     * @param int $count
      *
      * @return string
      */
-    private function editMessage(string $operator): string
+    private function editMessage(string $binder, int $count): string
     {
-        return "Invalid operator '$operator'" . PHP_EOL;
+        return "BindParam ':$binder' repeated $count times." . PHP_EOL;
     }
 }
