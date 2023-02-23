@@ -1,9 +1,9 @@
 <body><pre style="word-wrap: break-word; white-space: pre-wrap;">
 
-PHP dotenv
-==========
+QueryBuilder
+============
 
-Loads environment variables from `.env` to `getenv()`, `$_ENV` and `$_SERVER` automagically.
+Simple and easy-to-use SQL query builder.
 
 ![Banner](https://user-images.githubusercontent.com/2829600/71564012-31105580-2a91-11ea-9ad7-ef1278411b35.png)
 
@@ -20,7 +20,7 @@ Loads environment variables from `.env` to `getenv()`, `$_ENV` and `$_SERVER` au
 </p>
 
 
-## Why .env?
+## Why QueryBuilder?
 
 **You should never store sensitive credentials in your code**. Storing
 [configuration in the environment](https://www.12factor.net/config) is one of
@@ -63,6 +63,8 @@ We follow [semantic versioning](https://semver.org/), which means breaking
 changes may occur between major releases. We have upgrading guides available
 for V2 to V3, V3 to V4 and V4 to V5 available [here](UPGRADING.md).
 
+
+## Getting Started
 
 ## Usage
 
@@ -130,7 +132,7 @@ $s3_bucket = $_SERVER['S3_BUCKET'];
 ```
 
 
-### Putenv and Getenv
+### Building Queries
 
 Using `getenv()` and `putenv()` is strongly discouraged due to the fact that
 these functions are not thread safe, however it is still possible to instruct
@@ -144,9 +146,79 @@ $s3_bucket = getenv('S3_BUCKET');
 $s3_bucket = $_ENV['S3_BUCKET'];
 $s3_bucket = $_SERVER['S3_BUCKET'];
 ```
+#### DELETE Queries
+
+#### INSERT Queries
+
+#### UPDATE Queries
+
+#### SELECT Queries
 
 
-### Nesting Variables
+### Environment variables options
+
+### Customization options
+
+### Advanced options
+
+### Tips
+
+
+### Comments
+
+You can comment your `.env` file using the `#` character. E.g.
+
+```shell
+# this is a comment
+VAR="value" # comment
+VAR=value # comment
+```
+
+
+Sometimes you just wanna parse the file and resolve the nested environment variables, by giving us a string, and have an array returned back to you. While this is already possible, it is a little fiddly, so we have provided a direct way to do this:
+
+```php
+// ['FOO' => 'Bar', 'BAZ' => 'Hello Bar']
+Dotenv\Dotenv::parse("FOO=Bar\nBAZ=\"Hello \${FOO}\"");
+```
+
+This is exactly the same as:
+
+```php
+Dotenv\Dotenv::createArrayBacked(__DIR__)->load();
+```
+
+only, instead of providing the directory to find the file, you have directly provided the file contents.
+
+
+### Usage Notes
+
+When a new developer clones your codebase, they will have an additional
+one-time step to manually copy the `.env.example` file to `.env` and fill-in
+their own values (or get any sensitive values from a project co-worker).
+
+
+## Security
+
+If you discover a security vulnerability within this package, please send an email to security@tidelift.com. All security vulnerabilities will be promptly addressed. You may view our full security policy [here](https://github.com/vlucas/phpdotenv/security/policy).
+
+
+## License
+
+PHP dotenv is licensed under [The BSD 3-Clause License](LICENSE).
+
+
+## For Enterprise
+
+Available as part of the Tidelift Subscription
+
+The maintainers of `vlucas/phpdotenv` and thousands of other packages are working with Tidelift to deliver commercial support and maintenance for the open source dependencies you use to build your applications. Save time, reduce risk, and improve code health, while paying the maintainers of the exact dependencies you use. [Learn more.](https://tidelift.com/subscription/pkg/packagist-vlucas-phpdotenv?utm_source=packagist-vlucas-phpdotenv&amp;utm_medium=referral&amp;utm_campaign=enterprise&amp;utm_term=repo)
+
+</pre></body>[]
+
+
+
+
 
 It's possible to nest an environment variable within another, useful to cut
 down on repetition.
@@ -159,8 +231,6 @@ CACHE_DIR="${BASE_DIR}/cache"
 TMP_DIR="${BASE_DIR}/tmp"
 ```
 
-
-### Immutability and Repository Customization
 
 Immutability refers to if Dotenv is allowed to overwrite existing environment
 variables. If you want Dotenv to overwrite existing environment variables,
@@ -204,8 +274,6 @@ $dotenv->load();
 ```
 
 
-### Requiring Variables to be Set
-
 PHP dotenv has built in validation functionality, including for enforcing the
 presence of an environment variable. This is particularly useful to let people
 know any explicit required variables that your app will not work without.
@@ -229,8 +297,6 @@ One or more environment variables failed assertions: DATABASE_DSN is missing
 ```
 
 
-### Empty Variables
-
 Beyond simply requiring a variable to be set, you might also need to ensure the
 variable is not empty:
 
@@ -244,8 +310,6 @@ If the environment variable is empty, you'd get an Exception:
 One or more environment variables failed assertions: DATABASE_DSN is empty
 ```
 
-
-### Integer Variables
 
 You might also need to ensure that the variable is of an integer value. You may
 do the following:
@@ -268,8 +332,6 @@ $dotenv->ifPresent('FOO')->isInteger();
 ```
 
 
-### Boolean Variables
-
 You may need to ensure a variable is in the form of a boolean, accepting
 "true", "false", "On", "1", "Yes", "Off", "0" and "No". You may do the
 following:
@@ -291,8 +353,6 @@ $dotenv->ifPresent('FOO')->isBoolean();
 ```
 
 
-### Allowed Values
-
 It is also possible to define a set of values that your environment variable
 should be. This is especially useful in situations where only a handful of
 options or drivers are actually supported by your code:
@@ -313,57 +373,3 @@ It is also possible to define a regex that your environment variable should be.
 $dotenv->required('FOO')->allowedRegexValues('([[:lower:]]{3})');
 ```
 
-
-### Comments
-
-You can comment your `.env` file using the `#` character. E.g.
-
-```shell
-# this is a comment
-VAR="value" # comment
-VAR=value # comment
-```
-
-
-### Parsing Without Loading
-
-Sometimes you just wanna parse the file and resolve the nested environment variables, by giving us a string, and have an array returned back to you. While this is already possible, it is a little fiddly, so we have provided a direct way to do this:
-
-```php
-// ['FOO' => 'Bar', 'BAZ' => 'Hello Bar']
-Dotenv\Dotenv::parse("FOO=Bar\nBAZ=\"Hello \${FOO}\"");
-```
-
-This is exactly the same as:
-
-```php
-Dotenv\Dotenv::createArrayBacked(__DIR__)->load();
-```
-
-only, instead of providing the directory to find the file, you have directly provided the file contents.
-
-
-### Usage Notes
-
-When a new developer clones your codebase, they will have an additional
-one-time step to manually copy the `.env.example` file to `.env` and fill-in
-their own values (or get any sensitive values from a project co-worker).
-
-
-## Security
-
-If you discover a security vulnerability within this package, please send an email to security@tidelift.com. All security vulnerabilities will be promptly addressed. You may view our full security policy [here](https://github.com/vlucas/phpdotenv/security/policy).
-
-
-## License
-
-PHP dotenv is licensed under [The BSD 3-Clause License](LICENSE).
-
-
-## For Enterprise
-
-Available as part of the Tidelift Subscription
-
-The maintainers of `vlucas/phpdotenv` and thousands of other packages are working with Tidelift to deliver commercial support and maintenance for the open source dependencies you use to build your applications. Save time, reduce risk, and improve code health, while paying the maintainers of the exact dependencies you use. [Learn more.](https://tidelift.com/subscription/pkg/packagist-vlucas-phpdotenv?utm_source=packagist-vlucas-phpdotenv&amp;utm_medium=referral&amp;utm_campaign=enterprise&amp;utm_term=repo)
-
-</pre></body>[]
