@@ -63,11 +63,15 @@ try {
         exit($e->getMessage() . PHP_EOL);
     } finally {
 
-        fclose($handler);
+        if (isset($handler)) {
+            fclose($handler);
+        }
     }
 } finally {
 
-    fclose($handler);
+    if (isset($handler)) {
+        fclose($handler);
+    }
 }
 
 $content = file_get_contents(dirname(__DIR__) . '/config/queryBuilderConfig.php');
