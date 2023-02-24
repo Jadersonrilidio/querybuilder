@@ -1,6 +1,5 @@
 _trash
-resources
-tests
+.phan
 vendor
 .env
-.phan
+composer.lock
