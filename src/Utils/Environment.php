@@ -8,7 +8,7 @@ class Environment
      * Get environment variable or return default value.
      *
      * @param string $env
-     * @param $default
+     * @param mixed $default
      *
      * @return mixed
      */

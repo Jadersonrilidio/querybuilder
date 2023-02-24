@@ -113,6 +113,7 @@ class QueryBuilder implements QueryBuilderFactoryInterface
     {
         $simpleQueryBuilderClass = str_replace('Constrained', 'Simple', $class);
 
+        /** @var ConstrainedQueryBuilder */
         return new $class(
             new StateMachine(),
             new MethodRecordHelper(),
@@ -133,6 +134,7 @@ class QueryBuilder implements QueryBuilderFactoryInterface
         $bindErrorHandler = new BindErrorHandler($this->appConfig);
         $bindHandler = new BindParamHandler($this->appConfig, $bindErrorHandler);
 
+        /** @var SimpleQueryBuilder */
         return new $class($bindHandler);
     }
 

@@ -65,7 +65,7 @@ class Configuration
      *
      * @param ?string $configFilePath
      *
-     * @return array
+     * @return mixed[]
      */
     private function loadConfigurationFile(?string $configFilePath = null): array
     {
@@ -87,7 +87,7 @@ class Configuration
     /**
      * Set configuration parameters to class properties.
      *
-     * @param array $configs
+     * @param mixed[] $configs
      *
      * @return void
      */
