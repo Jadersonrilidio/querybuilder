@@ -9,7 +9,11 @@ use Jayrods\QueryBuilder\Exceptions\{
     RepeatedBinderNameException,
     WrongStateMethodCallException
 };
-use Jayrods\QueryBuilder\Utils\Configuration;
+use Jayrods\QueryBuilder\Utils\{
+    ConstraintErrorHandler,
+    MethodRecordHelper,
+    StateMachine
+};
 
 class DeleteQueryBuilder extends ConstrainedQueryBuilder
 {
@@ -23,15 +27,22 @@ class DeleteQueryBuilder extends ConstrainedQueryBuilder
     /**
      * Class constructor.
      *
-     * @param Configuration $appConfig
+     * @param StateMachine $state
+     * @param MethodRecordHelper $methodRercord
+     * @param ConstraintErrorHandler $errorHandler
+     * @param SimpleDeleteQueryBuilder $builder
      *
      * @return void
      */
-    public function __construct(Configuration $appConfig)
-    {
-        parent::__construct($appConfig);
+    public function __construct(
+        StateMachine $state,
+        MethodRecordHelper $methodRercord,
+        ConstraintErrorHandler $errorHandler,
+        SimpleDeleteQueryBuilder $builder
+    ) {
+        parent::__construct($state, $methodRercord, $errorHandler);
 
-        $this->builder = new SimpleDeleteQueryBuilder($appConfig);
+        $this->builder = $builder;
     }
 
     /**
@@ -440,5 +451,15 @@ class DeleteQueryBuilder extends ConstrainedQueryBuilder
     public function query(): string
     {
         return $this->builder->query();
+    }
+
+    /**
+     * Return array with BindParam names acresced by ':' notation.
+     *
+     * @return string[]
+     */
+    public function getBindParams(): array
+    {
+        return $this->builder->getBindParams();
     }
 }

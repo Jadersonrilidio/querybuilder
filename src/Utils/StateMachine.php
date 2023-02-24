@@ -12,18 +12,6 @@ class StateMachine
     private int $state = 0;
 
     /**
-     * Class constructor.
-     *
-     * @param int $state
-     *
-     * @return void
-     */
-    public function __construct(int $state = 0)
-    {
-        $this->state = $state;
-    }
-
-    /**
      * Increase state value by one.
      *
      * @return void

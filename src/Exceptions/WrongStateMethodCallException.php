@@ -43,6 +43,6 @@ class WrongStateMethodCallException extends DomainException
     private function editMessage(string $method, string $additionalMessage = ''): string
     {
         return "Method '$method' wrong calling order. $additionalMessage. " .
-            "Scaping '$method' method call." . PHP_EOL;
+            "Ignoring '$method' method call." . PHP_EOL;
     }
 }

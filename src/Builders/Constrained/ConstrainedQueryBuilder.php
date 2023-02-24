@@ -4,7 +4,6 @@ namespace Jayrods\QueryBuilder\Builders\Constrained;
 
 use Jayrods\QueryBuilder\Builders\QueryBuilderInterface;
 use Jayrods\QueryBuilder\Utils\{
-    Configuration,
     ConstraintErrorHandler,
     MethodRecordHelper,
     StateMachine
@@ -57,14 +56,26 @@ abstract class ConstrainedQueryBuilder implements QueryBuilderInterface
     /**
      * Class constructor.
      *
-     * @param Configuration $appConfig
+     * @param StateMachine $state
+     * @param MethodRecordHelper $methodRercord
+     * @param ConstraintErrorHandler $errorHandler
      *
      * @return void
      */
-    public function __construct(Configuration $appConfig)
-    {
-        $this->state = new StateMachine();
-        $this->methodRercord = new MethodRecordHelper();
-        $this->errorHandler = new ConstraintErrorHandler($appConfig);
+    public function __construct(
+        StateMachine $state,
+        MethodRecordHelper $methodRercord,
+        ConstraintErrorHandler $errorHandler
+    ) {
+        $this->state = $state;
+        $this->methodRercord = $methodRercord;
+        $this->errorHandler = $errorHandler;
     }
+
+    /**
+     * Return array with BindParam names acresced by ':' notation.
+     *
+     * @return string[]
+     */
+    abstract public function getBindParams(): array;
 }

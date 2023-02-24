@@ -2,8 +2,12 @@
 
 namespace Jayrods\QueryBuilder\Utils;
 
+use Jayrods\QueryBuilder\Traits\MethodNameParser;
+
 class MethodRecordHelper
 {
+    use MethodNameParser;
+
     /**
      * Array containing called methods' names as key and called times as value.
      *
@@ -67,19 +71,5 @@ class MethodRecordHelper
     public function resetMethodsCall(): void
     {
         $this->methodsCall = array();
-    }
-
-    /**
-     * Parse provided method's name from it's namespace and return plain method name.
-     *
-     * @param string $method It is strongly encouraged to use __METHOD__ magic constant as argument.
-     *
-     * @return string Plain method name.
-     */
-    private function parseMethodName(string $method): string
-    {
-        $exploded = explode('::', $method);
-
-        return array_pop($exploded);
     }
 }

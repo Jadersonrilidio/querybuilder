@@ -2,11 +2,16 @@
 
 namespace Jayrods\QueryBuilder\Utils;
 
-use Jayrods\QueryBuilder\Exceptions\DuplicatedMethodCallException;
-use Jayrods\QueryBuilder\Exceptions\WrongStateMethodCallException;
+use Jayrods\QueryBuilder\Exceptions\{
+    DuplicatedMethodCallException,
+    WrongStateMethodCallException
+};
+use Jayrods\QueryBuilder\Traits\MethodNameParser;
 
 class ConstraintErrorHandler
 {
+    use MethodNameParser;
+
     /**
      * Enable constrained mode to throw an exception on fail.
      *
@@ -74,19 +79,5 @@ class ConstraintErrorHandler
         if ($this->failMode) {
             throw new DuplicatedMethodCallException($method, $additionalMessage);
         }
-    }
-
-    /**
-     * Parse provided method's name from it's namespace and return plain method name.
-     *
-     * @param string $method
-     *
-     * @return string Plain method name.
-     */
-    private function parseMethodName(string $method): string
-    {
-        $exploded = explode('::', $method);
-
-        return array_pop($exploded);
     }
 }

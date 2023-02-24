@@ -10,7 +10,11 @@ use Jayrods\QueryBuilder\Exceptions\{
     RepeatedBinderNameException,
     WrongStateMethodCallException
 };
-use Jayrods\QueryBuilder\Utils\Configuration;
+use Jayrods\QueryBuilder\Utils\{
+    ConstraintErrorHandler,
+    MethodRecordHelper,
+    StateMachine
+};
 
 class SelectQueryBuilder extends ConstrainedQueryBuilder
 {
@@ -24,15 +28,22 @@ class SelectQueryBuilder extends ConstrainedQueryBuilder
     /**
      * Class constructor.
      *
-     * @param Configuration $appConfig
+     * @param StateMachine $state
+     * @param MethodRecordHelper $methodRercord
+     * @param ConstraintErrorHandler $errorHandler
+     * @param SimpleSelectQueryBuilder $builder
      *
      * @return void
      */
-    public function __construct(Configuration $appConfig)
-    {
-        parent::__construct($appConfig);
+    public function __construct(
+        StateMachine $state,
+        MethodRecordHelper $methodRercord,
+        ConstraintErrorHandler $errorHandler,
+        SimpleSelectQueryBuilder $builder
+    ) {
+        parent::__construct($state, $methodRercord, $errorHandler);
 
-        $this->builder = new SimpleSelectQueryBuilder($appConfig);
+        $this->builder = $builder;
     }
 
     /**
@@ -675,5 +686,15 @@ class SelectQueryBuilder extends ConstrainedQueryBuilder
     public function query(): string
     {
         return $this->builder->query();
+    }
+
+    /**
+     * Return array with BindParam names acresced by ':' notation.
+     *
+     * @return string[]
+     */
+    public function getBindParams(): array
+    {
+        return $this->builder->getBindParams();
     }
 }

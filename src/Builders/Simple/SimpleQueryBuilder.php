@@ -3,7 +3,7 @@
 namespace Jayrods\QueryBuilder\Builders\Simple;
 
 use Jayrods\QueryBuilder\Builders\QueryBuilder;
-use Jayrods\QueryBuilder\Utils\{BindParamHandler, Configuration};
+use Jayrods\QueryBuilder\Utils\BindParamHandler;
 
 abstract class SimpleQueryBuilder extends QueryBuilder
 {
@@ -17,10 +17,20 @@ abstract class SimpleQueryBuilder extends QueryBuilder
     /**
      * Class constructor.
      *
-     * @param Configuration $appConfig
+     * @param BindParamHandler $bindHandler
      */
-    public function __construct(Configuration $appConfig)
+    public function __construct(BindParamHandler $bindHandler)
     {
-        $this->bindHandler = new BindParamHandler($appConfig);
+        $this->bindHandler = $bindHandler;
+    }
+
+    /**
+     * Return array with BindParam names acresced by ':' notation.
+     *
+     * @return string[]
+     */
+    public function getBindParams(): array
+    {
+        return $this->bindHandler->getBindParams();
     }
 }

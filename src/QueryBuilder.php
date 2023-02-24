@@ -3,9 +3,19 @@
 namespace Jayrods\QueryBuilder;
 
 use InvalidArgumentException;
+use Jayrods\QueryBuilder\Builders\Constrained\ConstrainedQueryBuilder;
 use Jayrods\QueryBuilder\Builders\QueryBuilderInterface;
+use Jayrods\QueryBuilder\Builders\Simple\SimpleQueryBuilder;
 use Jayrods\QueryBuilder\Factories\QueryBuilderFactoryInterface;
-use Jayrods\QueryBuilder\Utils\{Configuration, SingleConfig};
+use Jayrods\QueryBuilder\Utils\{
+    BindErrorHandler,
+    BindParamHandler,
+    Configuration,
+    ConstraintErrorHandler,
+    MethodRecordHelper,
+    SingleConfig,
+    StateMachine
+};
 
 class QueryBuilder implements QueryBuilderFactoryInterface
 {
@@ -68,7 +78,9 @@ class QueryBuilder implements QueryBuilderFactoryInterface
             $case
         );
 
-        return new $class($this->appConfig);
+        return $this->appConfig->enableConstrainedMode()
+            ? $this->buildConstrainedQueryBuilder($class)
+            : $this->buildSimpleQueryBuilder($class);
     }
 
     /**
@@ -88,6 +100,40 @@ class QueryBuilder implements QueryBuilderFactoryInterface
         $class .= "\\{$case}QueryBuilder";
 
         return $class;
+    }
+
+    /**
+     * Create a ConstrainedQueryBuilder instance.
+     *
+     * @param string $class
+     *
+     * @return ConstrainedQueryBuilder
+     */
+    private function buildConstrainedQueryBuilder(string $class): ConstrainedQueryBuilder
+    {
+        $simpleQueryBuilderClass = str_replace('Constrained', 'Simple', $class);
+
+        return new $class(
+            new StateMachine(),
+            new MethodRecordHelper(),
+            new ConstraintErrorHandler($this->appConfig),
+            $this->buildSimpleQueryBuilder($simpleQueryBuilderClass)
+        );
+    }
+
+    /**
+     * Create a SimpleQueryBuilder instance.
+     *
+     * @param string $class
+     *
+     * @return SimpleQueryBuilder
+     */
+    private function buildSimpleQueryBuilder(string $class): SimpleQueryBuilder
+    {
+        $bindErrorHandler = new BindErrorHandler($this->appConfig);
+        $bindHandler = new BindParamHandler($this->appConfig, $bindErrorHandler);
+
+        return new $class($bindHandler);
     }
 
     /**

@@ -43,6 +43,6 @@ class DuplicatedMethodCallException extends DomainException
     private function editMessage(string $method, string $additionalMessage = ''): string
     {
         return "Method '$method' already called once $additionalMessage. " .
-            "Scaping '$method' method call." . PHP_EOL;
+            "Ignoring '$method' method call." . PHP_EOL;
     }
 }
