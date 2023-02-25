@@ -6,18 +6,20 @@ A straight forward and easy-to-use SQL query builder for simple DML and DQL quer
     <a href="https://packagist.org/packages/jayrods/querybuilder">
         <img src="./resources/img/logo.png" alt="Package logo"></img>
     </a>
-</p>
-
-<p align="center">
     <a href="LICENSE">
-        <img src="https://img.shields.io/badge/license-BSD%203--Clause-brightgreen.svg?style=flat-square" alt="Software License"></img>
+        <img src="https://img.shields.io/github/license/Jadersonrilidio/querybuilder?style=flat-square" alt="Software License"></img>
     </a>
     <a href="https://packagist.org/packages/jayrods/querybuilder">
-        <img src="https://img.shields.io/packagist/dt/vlucas/phpdotenv.svg?style=flat-square" alt="Total Downloads"></img>
+        <img src="https://img.shields.io/github/downloads/Jadersonrilidio/querybuilder/total?style=flat-square" alt="Downloads"></img>
     </a>
     <a href="https://github.com/Jadersonrilidio/querybuilder/releases">
-        <img src="https://img.shields.io/github/release/vlucas/phpdotenv.svg?style=flat-square" alt="Latest Version"></img>
+        <img src="https://img.shields.io/github/v/release/Jadersonrilidio/querybuilder?style=flat-square" alt="Latest Version"></img>
     </a>
+    <a href="https://packagist.org/packages/jayrods/querybuilder">
+        <img src="https://img.shields.io/github/languages/code-size/Jadersonrilidio/querybuilder?style=flat-square" alt="Code Size"></img>
+    </a>
+
+    
 </p>
 
 
@@ -53,6 +55,8 @@ whenever major version releases becomes available [here](UPGRADING.md).
 
 ## Getting Started
 
+After
+
 ### Building Queries
 #### DELETE Queries
 #### INSERT Queries
@@ -67,7 +71,7 @@ whenever major version releases becomes available [here](UPGRADING.md).
 
 ### Tips
 ### Comments
-### Usage Notes
+### Use Notes
 
 When a new developer clones your codebase, they will have an additional
 one-time step to manually copy the `.env.example` file to `.env` and fill-in
@@ -76,10 +80,9 @@ their own values (or get any sensitive values from a project co-worker).
 
 ## Security
 
-If you discover a security vulnerability within this package, please send an
+If you discover a security vulnerability within this package, please report the issue or send an
 email to [jayrods](jaderson.rodrigues@yahoo.com). All security vulnerabilities
-will be promptly addressed. You may view our full security policy 
-[here](https://github.com/vlucas/phpdotenv/security/policy).
+will be promptly addressed. We appreciate your concern.
 
 
 ## License

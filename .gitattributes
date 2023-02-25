@@ -9,3 +9,4 @@
 /.gitignore export-ignore
 /composer.lock export-ignore
 /README.md export-ignore
+/UPGRADING.md export-ignore
