@@ -25,7 +25,7 @@ A straight forward and easy-to-use SQL query builder for simple DML and DQL quer
 </p>
 
 
-# About the Project
+## About
 
 **Writing hard coded SQL queries is a subject of great concern amongst developers!**
 It not just lets your code 'dirty' (as some PHP purists might say) but also affects
@@ -34,7 +34,7 @@ this package comes in handy with a simple approach of wrapping SQL queries into 
 classes and methods, providing an abstraction with easy-to-use syntax and extra
 features to assert the queries are being written accordingly.
 
-Also bear in mind this package was developed for educational purposes goal.
+NOTE: Bear in mind this package was developed for educational purposes goal.
 
 
 ## Installation
@@ -53,6 +53,67 @@ or add it by hand to your `composer.json` file.
 We follow [semantic versioning](https://semver.org/), which means breaking
 changes may occur between major releases. We would introduce upgrading guides
 whenever major version releases becomes available [here](UPGRADING.md).
+
+
+## Basic Usage
+
+Before start using the component, it's important to know how it is structured.
+The QueryBuilder component is divided among 4 different use-cases, each
+representing one CRUD operation (Create, Read, Update and Delete). However
+for simplicity sake, the component makes available a QueryBuilderFactory object,
+in which could be used to create all different QueryBuilders according to use-case.
+
+Follows an example script using the component:
+
+```php
+// Declare class with namespace to use the component
+use Jayrods\QueryBuilder\QueryBuilder;
+
+// QueryBuilderFactory instance, which provides access to all QueryBuilder according to use-case.
+$builderFactory = new QueryBuilder();
+
+// Use the $builderFactory to create a SELECT queryBuilder use-case.
+$builder = new $builderFactory->create(QueryBuilder::SELECT);
+
+// Then this builder could be used as many times is needed to write SELECT type queries.
+$query  = $builder->selectFrom('users')
+    ->column('uuid')
+    ->columnAs('name', 'username')
+    ->column('email')
+    ->where('uuid', '=', 'uuid')
+    ->build();
+
+echo $query;
+```
+Output:
+
+```sql
+"SELECT users.uuid, users.name AS username, users.email FROM users WHERE uuid = :uuid"
+```
+
+**NOTE:** The `build()` method returns the built query and save it internaly,
+providing a `query()` method to return this saved query. After calling the
+`build()` method all object's properties are reset to default, allowing
+the object to start building a next query.
+
+The `$builder` object also enable the partially construction fo the query,
+providing more flexibility to build the query:
+
+```php
+// Constructing the same query from above, but separately.
+$builder->selectFrom('users');
+
+$builder->column('uuid');
+$builder->column('email');
+$builder->columnAs('name', 'username');
+
+$builder->where('uuid', '=', 'uuid');
+
+$query = $builder->build();
+
+// Output: "SELECT users.uuid, users.name AS username, users.email FROM users WHERE uuid = :uuid"
+echo $query;
+```
 
 
 ## Getting Started
