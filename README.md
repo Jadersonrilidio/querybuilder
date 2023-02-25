@@ -1,6 +1,6 @@
 QueryBuilder
 ============
-Simple and easy-to-use SQL query builder.
+A straight forward and easy-to-use SQL query builder for simple DML and DQL queries.
 
 <p align="center">
     <a href="https://packagist.org/packages/jayrods/querybuilder"><img src="./resources/img/logo.png" alt="Package logo"></img></a>
@@ -12,9 +12,11 @@ Simple and easy-to-use SQL query builder.
     <a href="https://github.com/Jadersonrilidio/querybuilder/releases"><img src="https://img.shields.io/github/release/vlucas/phpdotenv.svg?style=flat-square" alt="Latest Version"></img></a>
 </p>
 
-## Why QueryBuilder?
+## About the Project
 
-**You should never store sensitive credentials in your code**. Storing
+**Writing SQL queries hard coded with your source code is subject of great concern amongst programmers all over the internet!** It not just lets your code 'dirty' (as some PHP purists might say) but also affects testability, simplicity and impose more work over development for aqquaintance of the SQL queries. Thinking about those concerns this package comes in handy with a simple approach of wrapping SQL queries into PHP classes and methods, providing an abstraction with easy-to-use syntax and extra features to assert the queries are being written accordingly.
+
+Storing
 [configuration in the environment](https://www.12factor.net/config) is one of
 the tenets of a [twelve-factor app](https://www.12factor.net/). Anything that
 is likely to change between deployment environments – such as database
@@ -59,6 +61,8 @@ for V2 to V3, V3 to V4 and V4 to V5 available [here](UPGRADING.md).
 ## Getting Started
 
 ## Usage
+
+## Limitations
 
 The `.env` file is generally kept out of version control since it can contain
 sensitive API keys and passwords. A separate `.env.example` file is created
