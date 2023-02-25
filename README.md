@@ -111,7 +111,8 @@ $query = $builder->delete('table')
     ->where('id', '=', 'id')
     ->build();
 
-$result = "DELETE FROM table WHERE id = :id";
+// Result
+"DELETE FROM table WHERE id = :id";
 
 
 // Example of building a INSERT query.
@@ -123,7 +124,8 @@ $query = $builder->insertInto('table')
     ->column('third')
     ->build();
 
-$result = "INSERT INTO table (first, second, third) VALUES (:first, :second, :third)";
+// Result
+"INSERT INTO table (first, second, third) VALUES (:first, :second, :third)";
 
 
 // Example of building a SELECT query.
@@ -132,7 +134,8 @@ $builder = $builderFactory->create(QueryBuilder::SELECT);
 $query = $builder->selectFrom('table')
     ->build();
 
-$result = "SELECT * FROM table";
+// Result
+"SELECT * FROM table";
 
 
 // Example of building a UPDATE query.
@@ -144,7 +147,8 @@ $query = $builder->update('table')
     ->where('id', '=', 'id')
     ->build();
 
-$result = "UPDATE table SET name = :name, email = :email WHERE id = :id";
+// Result
+"UPDATE table SET name = :name, email = :email WHERE id = :id";
 ```
 
 A Depper explanation of each use-case could be seen bellow:
