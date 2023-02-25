@@ -21,10 +21,6 @@
             "Jayrods\\QueryBuilder\\": "src/"
         }
     },
-    "require": {
-        "php": "^7.4 || ^8.0",
-        "vlucas/phpdotenv": "^5.5"
-    },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.7",
         "phan/phan": "^5.4",
@@ -33,6 +29,7 @@
     "suggest": {
         "vlucas/phpdotenv": "Allows safer environment variables setting"
     },
+    "minimum-stability": "stable",
     "scripts": {
         "proc-test": "php tests/development-test.php",
         "qb-publish-config": "php bin/qb_publish_config",

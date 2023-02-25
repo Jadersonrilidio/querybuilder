@@ -6,6 +6,8 @@ A straight forward and easy-to-use SQL query builder for simple DML and DQL quer
     <a href="https://packagist.org/packages/jayrods/querybuilder">
         <img src="./resources/img/logo.png" alt="Package logo"></img>
     </a>
+</p>
+<p align="center">
     <a href="LICENSE">
         <img src="https://img.shields.io/github/license/Jadersonrilidio/querybuilder?style=flat-square" alt="Software License"></img>
     </a>
@@ -103,7 +105,7 @@ starter method with the names matching the SQL syntax as 'selectFrom',
 'insertInto', 'delete', 'update'; and finish the building and getting the
 query string using the commom method 'build', as shown in the examples bellow:
 
-Example of building a DELETE query.
+Example for build DELETE queries.
 
 ```php
 $builder = $builderFactory->create(QueryBuilder::DELETE);
@@ -115,7 +117,7 @@ $query = $builder->delete('table')
 $result = "DELETE FROM table WHERE id = :id";
 ```
 
-Example of building a INSERT query.
+Example for build INSERT queries.
 
 ```php
 $builder = $builderFactory->create(QueryBuilder::INSERT);
@@ -128,7 +130,7 @@ $query = $builder->insertInto('table')
 
 $result = "INSERT INTO table (first, second, third) VALUES (:first, :second, :third)";
 ```
-Example of building a SELECT query.
+Example for build SELECT queries.
 
 ```php
 $builder = $builderFactory->create(QueryBuilder::SELECT);
@@ -139,7 +141,7 @@ $query = $builder->selectFrom('table')
 $result = "SELECT * FROM table";
 ```
 
-Example of building a UPDATE query.
+Example for build UPDATE queries.
 
 ```php
 $builder = $builderFactory->create(QueryBuilder::UPDATE);
