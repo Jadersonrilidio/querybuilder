@@ -103,19 +103,21 @@ starter method with the names matching the SQL syntax as 'selectFrom',
 'insertInto', 'delete', 'update'; and finish the building and getting the
 query string using the commom method 'build', as shown in the examples bellow:
 
+Example of building a DELETE query.
+
 ```php
-// Example of building a DELETE query.
 $builder = $builderFactory->create(QueryBuilder::DELETE);
 
 $query = $builder->delete('table')
     ->where('id', '=', 'id')
     ->build();
 
-// Result
-"DELETE FROM table WHERE id = :id";
+$result = "DELETE FROM table WHERE id = :id";
+```
 
+Example of building a INSERT query.
 
-// Example of building a INSERT query.
+```php
 $builder = $builderFactory->create(QueryBuilder::INSERT);
 
 $query = $builder->insertInto('table')
@@ -124,21 +126,22 @@ $query = $builder->insertInto('table')
     ->column('third')
     ->build();
 
-// Result
-"INSERT INTO table (first, second, third) VALUES (:first, :second, :third)";
+$result = "INSERT INTO table (first, second, third) VALUES (:first, :second, :third)";
+```
+Example of building a SELECT query.
 
-
-// Example of building a SELECT query.
+```php
 $builder = $builderFactory->create(QueryBuilder::SELECT);
 
 $query = $builder->selectFrom('table')
     ->build();
 
-// Result
-"SELECT * FROM table";
+$result = "SELECT * FROM table";
+```
 
+Example of building a UPDATE query.
 
-// Example of building a UPDATE query.
+```php
 $builder = $builderFactory->create(QueryBuilder::UPDATE);
 
 $query = $builder->update('table')
@@ -147,8 +150,7 @@ $query = $builder->update('table')
     ->where('id', '=', 'id')
     ->build();
 
-// Result
-"UPDATE table SET name = :name, email = :email WHERE id = :id";
+$result = "UPDATE table SET name = :name, email = :email WHERE id = :id";
 ```
 
 A Depper explanation of each use-case could be seen bellow:
