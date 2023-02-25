@@ -2,14 +2,15 @@ QueryBuilder
 ============
 Simple and easy-to-use SQL query builder.
 
-<a href="https://packagist.org/packages/jayrods/querybuilder"><img src="./resources/img/logo.png" alt="Package logo"></img></a>
+<p align="center">
+    <a href="https://packagist.org/packages/jayrods/querybuilder"><img src="./resources/img/logo.png" alt="Package logo"></img></a>
+</p>
 
 <p align="center">
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-BSD%203--Clause-brightgreen.svg?style=flat-square" alt="Software License"></img></a>
     <a href="https://packagist.org/packages/jayrods/querybuilder"><img src="https://img.shields.io/packagist/dt/vlucas/phpdotenv.svg?style=flat-square" alt="Total Downloads"></img></a>
     <a href="https://github.com/Jadersonrilidio/querybuilder/releases"><img src="https://img.shields.io/github/release/vlucas/phpdotenv.svg?style=flat-square" alt="Latest Version"></img></a>
 </p>
-
 
 ## Why QueryBuilder?
 
