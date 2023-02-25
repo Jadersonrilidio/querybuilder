@@ -5,16 +5,18 @@ QueryBuilder
 
 Simple and easy-to-use SQL query builder.
 
-![Banner](https://user-images.githubusercontent.com/2829600/71564012-31105580-2a91-11ea-9ad7-ef1278411b35.png)
+![Banner]( 
+        <a href="https://packagist.org/packages/jayrods/querybuilder">
+        <img src="./resources/img/logo.png" alt="Package logo"></img></a>)
 
 <p align="center">
     <a href="LICENSE">
         <img src="https://img.shields.io/badge/license-BSD%203--Clause-brightgreen.svg?style=flat-square" alt="Software License"></img>
     </a>
-    <a href="https://packagist.org/packages/vlucas/phpdotenv">
+    <a href="https://packagist.org/packages/jayrods/querybuilder">
         <img src="https://img.shields.io/packagist/dt/vlucas/phpdotenv.svg?style=flat-square" alt="Total Downloads"></img>
     </a>
-    <a href="https://github.com/vlucas/phpdotenv/releases">
+    <a href="https://github.com/Jadersonrilidio/querybuilder/releases">
         <img src="https://img.shields.io/github/release/vlucas/phpdotenv.svg?style=flat-square" alt="Latest Version"></img>
     </a>
 </p>
