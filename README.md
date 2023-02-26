@@ -108,7 +108,8 @@ following by the notation `:parameter` or `?`, as could be seen in
 
 **NOTE:** The `build()` method returns the built query and save it internaly,
 providing a `query()` method to retrieve the query whenever you whish. It also
-resets all other object's properties to default.
+resets all other object's properties to default, enabling it to promptly start
+building another query.
 
 ```php
 echo $builder->query();
