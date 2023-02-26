@@ -103,7 +103,7 @@ QueryBuilder::UPDATE = 'update';
 ```
 
 **NOTE:** By convention, the component works ONLY with parameterized values,
-following by the notation ':parameter' or '?', as could be seen in
+following by the notation `:parameter` or `?`, as could be seen in
 [Parameterized options](https://github.com/Jadersonrilidio/querybuilder#parameterized-options).
 
 **NOTE:** The `build()` method returns the built query and save it internaly,
@@ -114,7 +114,7 @@ resets all other object's properties to default.
 echo $builder->query();
 ```
 
-**ATTENTION!** Calling the 'build()' method a second time will override the previously saved query
+**ATTENTION!** Calling the `build()` method a second time will override the previously saved query.
 
 
 **NOTE:** The `$builder` object also enables partial construction of the query,
@@ -226,6 +226,65 @@ More detailed explanation for each use-case could be seen on the sections bellow
 
 
 ### DELETE Queries
+
+**Methods**
+
+```php
+// Start building DELETE query.
+public function delete(string $table): self
+
+// Start WHERE clause.
+public function where(string $column, string $operator, ?string $binder = null): self
+
+// Start WHERE NOT clause.
+public function whereNot(string $column, string $operator, ?string $binder = null): self
+
+// Start WHERE IN clause.
+public function whereIn(string $column, string $subquery): self
+
+// Start WHERE NOT IN clause.
+public function whereNotIn(string $column, string $subquery): self
+
+// Start WHERE BETWEEN clause.
+public function whereBetween(string $column, ?string $left = null, ?string $right = null): self
+
+// Start WHERE NOT BETWEEN clause.
+public function whereNotBetween(string $column, ?string $left = null, ?string $right = null): self
+
+// Add AND clause to conditions.
+public function and(string $column, string $operator, ?string $binder = null): self
+
+// Add AND NOT clause to conditions.
+public function andNot(string $column, string $operator, ?string $binder = null): self
+
+// Add AND BETWEEN clause to conditions.
+public function andBetween(string $column, ?string $left = null, ?string $right = null): self
+
+// Add AND NOT BETWEEN clause to conditions.
+public function andNotBetween(string $column, ?string $left = null, ?string $right = null): self
+
+// Add OR clause to conditions.
+public function or(string $column, string $operator, ?string $binder = null): self
+
+// Add OR NOT clause to conditions.
+public function orNot(string $column, string $operator, ?string $binder = null): self
+
+// Add OR BETWEEN clause to conditions.
+public function orBetween(string $column, ?string $left = null, ?string $right = null): self
+
+// Add OR NOT BETWEEN clause to conditions.
+public function orNotBetween(string $column, ?string $left = null, ?string $right = null): self
+
+// Build the query and set it to the query attribute.
+public function build(): string
+
+// Return the last built query or empty string.
+public function query(): string
+
+// Return array with used parameterized names acresced by ':' notation.
+public function getBindParams(): array
+```
+
 
 ```php
 use Jayrods\QueryBuilder\QueryBuilder;
