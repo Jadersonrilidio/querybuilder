@@ -20,22 +20,22 @@ use Jayrods\QueryBuilder\Utils\{
 class QueryBuilder implements QueryBuilderFactoryInterface
 {
     /**
-     * Representation of delete case constant.
+     * Delete use-case constant.
      */
     public const DELETE = 'delete';
 
     /**
-     * Representation of insert case constant.
+     * Insert use-case constant.
      */
     public const INSERT = 'insert';
 
     /**
-     * Representation of select case constant.
+     * Select use-case constant.
      */
     public const SELECT = 'select';
 
     /**
-     * Representation of update case constant.
+     * Update use-case constant.
      */
     public const UPDATE = 'update';
 

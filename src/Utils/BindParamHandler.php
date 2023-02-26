@@ -8,14 +8,14 @@ use Jayrods\QueryBuilder\Utils\{BindErrorHandler, Configuration};
 class BindParamHandler
 {
     /**
-     * Associative array containing used binders' names as key and amount of times used as value.
+     * Associative array containing used parameterized names as key and amount of times used as value.
      *
      * @var int[]
      */
     private array $binders = array();
 
     /**
-     * Array containing used binders' names acresced by ':' notation.
+     * Array containing used parameterized names acresced by ':' notation.
      *
      * @var string[]
      */
@@ -26,7 +26,7 @@ class BindParamHandler
      *
      * @var bool
      */
-    private bool $namedBindParamMode;
+    private bool $parameterizedMode;
 
     /**
      * BindErrorHandler instance.
@@ -45,7 +45,7 @@ class BindParamHandler
      */
     public function __construct(Configuration $appConfig, BindErrorHandler $errorHandler)
     {
-        $this->namedBindParamMode = $appConfig->namedBindParamMode();
+        $this->parameterizedMode = $appConfig->parameterizedMode();
         $this->errorHandler = $errorHandler;
     }
 
@@ -60,7 +60,7 @@ class BindParamHandler
      */
     public function handle(string $binder): string
     {
-        if (!$this->namedBindParamMode) {
+        if (!$this->parameterizedMode) {
             return '?';
         }
 

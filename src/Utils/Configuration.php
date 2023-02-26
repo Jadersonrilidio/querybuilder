@@ -30,21 +30,21 @@ class Configuration
      *
      * @var bool
      */
-    private bool $namedBindParamMode;
+    private bool $parameterizedMode;
 
     /**
      * Enable to throw an exception on fail.
      *
      * @var bool
      */
-    private bool $namedBindParamFailMode;
+    private bool $parameterizedModeFailOnError;
 
     /**
      * Enable to echo exception message information on fail.
      *
      * @var bool
      */
-    private bool $namedBindParamEchoWarningsMode;
+    private bool $parameterizedModeEchoWarningsOnError;
 
     /**
      * Class constructor.
@@ -96,9 +96,9 @@ class Configuration
         $this->enableConstrainedMode = $configs['ENABLE_CONSTRAINED_MODE'] ?? true;
         $this->failOnWrongMethodCall = $configs['FAIL_ON_WRONG_METHOD_CALL'] ?? false;
         $this->echoWarningsOnWrongMethodCall = $configs['ECHO_WARNINGS_ON_WRONG_METHOD_CALL'] ?? true;
-        $this->namedBindParamMode = $configs['NAMED_BIND_PARAM_MODE'] ?? true;
-        $this->namedBindParamFailMode = $configs['NAMED_BIND_PARAM_FAIL_MODE'] ?? false;
-        $this->namedBindParamEchoWarningsMode = $configs['NAMED_BIND_PARAM_ECHO_WARNINGS_MODE'] ?? true;
+        $this->parameterizedMode = $configs['PARAMETERIZED_MODE'] ?? true;
+        $this->parameterizedModeFailOnError = $configs['PARAMETERIZED_MODE_FAIL_ON_ERROR'] ?? false;
+        $this->parameterizedModeEchoWarningsOnError = $configs['PARAMETERIZED_MODE_ECHO_WARNINGS_ON_ERROR'] ?? true;
     }
 
     /**
@@ -136,9 +136,9 @@ class Configuration
      *
      * @return bool
      */
-    public function namedBindParamMode(): bool
+    public function parameterizedMode(): bool
     {
-        return $this->namedBindParamMode;
+        return $this->parameterizedMode;
     }
 
     /**
@@ -146,9 +146,9 @@ class Configuration
      *
      * @return bool
      */
-    public function namedBindParamFailMode(): bool
+    public function parameterizedModeFailOnError(): bool
     {
-        return $this->namedBindParamFailMode;
+        return $this->parameterizedModeFailOnError;
     }
 
     /**
@@ -156,8 +156,8 @@ class Configuration
      *
      * @return bool
      */
-    public function namedBindParamEchoWarningsMode(): bool
+    public function parameterizedModeEchoWarningsOnError(): bool
     {
-        return $this->namedBindParamEchoWarningsMode;
+        return $this->parameterizedModeEchoWarningsOnError;
     }
 }

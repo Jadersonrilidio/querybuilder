@@ -30,8 +30,8 @@ class BindErrorHandler
      */
     public function __construct(Configuration $appConfig)
     {
-        $this->failMode = $appConfig->namedBindParamFailMode();
-        $this->echoWarningsMode = $appConfig->namedBindParamEchoWarningsMode();
+        $this->failMode = $appConfig->parameterizedModeFailOnError();
+        $this->echoWarningsMode = $appConfig->parameterizedModeFailOnError();
     }
 
     /**

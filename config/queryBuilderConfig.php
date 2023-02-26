@@ -19,17 +19,17 @@ return [
     'ECHO_WARNINGS_ON_WRONG_METHOD_CALL' => Env::get('QB_ECHO_WARNINGS_ON_WRONG_METHOD_CALL', true),
 
     /**
-     * Enable named BindParam if true or question mark if false.
+     * Enable custom named parameters if true or question mark if false.
      */
-    'NAMED_BIND_PARAM_MODE' => Env::get('QB_NAMED_BIND_PARAM_MODE', true),
+    'PARAMETERIZED_MODE' => Env::get('QB_PARAMETERIZED_MODE', true),
 
     /**
      * Enable to throw an exception on fail.
      */
-    'NAMED_BIND_PARAM_FAIL_MODE' => Env::get('QB_NAMED_BIND_PARAM_FAIL_MODE', true),
+    'PARAMETERIZED_MODE_FAIL_ON_ERROR' => Env::get('QB_PARAMETERIZED_MODE_FAIL_ON_ERROR', true),
 
     /**
      * Enable to echo exception message information on fail.
      */
-    'NAMED_BIND_PARAM_ECHO_WARNINGS_MODE' => Env::get('QB_NAMED_BIND_PARAM_ECHO_WARNINGS_MODE', false),
+    'PARAMETERIZED_MODE_ECHO_WARNINGS_ON_ERROR' => Env::get('QB_PARAMETERIZED_MODE_ECHO_WARNINGS_ON_ERROR', false),
 ];
