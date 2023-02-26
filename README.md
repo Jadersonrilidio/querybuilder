@@ -229,6 +229,7 @@ More detailed explanation for each use-case could be seen on the sections bellow
 
 **Methods**
 
+
 ```php
 // Start building DELETE query.
 public function delete(string $table): self
@@ -283,6 +284,62 @@ public function query(): string
 
 // Return array with used parameterized names acresced by ':' notation.
 public function getBindParams(): array
+```
+
+```php
+// Start building DELETE query.
+$builder->delete(string $table): self
+
+// Start WHERE clause.
+$builder->where(string $column, string $operator, ?string $binder = null): self
+
+// Start WHERE NOT clause.
+$builder->whereNot(string $column, string $operator, ?string $binder = null): self
+
+// Start WHERE IN clause.
+$builder->whereIn(string $column, string $subquery): self
+
+// Start WHERE NOT IN clause.
+$builder->whereNotIn(string $column, string $subquery): self
+
+// Start WHERE BETWEEN clause.
+$builder->whereBetween(string $column, ?string $left = null, ?string $right = null): self
+
+// Start WHERE NOT BETWEEN clause.
+$builder->whereNotBetween(string $column, ?string $left = null, ?string $right = null): self
+
+// Add AND clause to conditions.
+$builder->and(string $column, string $operator, ?string $binder = null): self
+
+// Add AND NOT clause to conditions.
+$builder->andNot(string $column, string $operator, ?string $binder = null): self
+
+// Add AND BETWEEN clause to conditions.
+$builder->andBetween(string $column, ?string $left = null, ?string $right = null): self
+
+// Add AND NOT BETWEEN clause to conditions.
+$builder->andNotBetween(string $column, ?string $left = null, ?string $right = null): self
+
+// Add OR clause to conditions.
+$builder->or(string $column, string $operator, ?string $binder = null): self
+
+// Add OR NOT clause to conditions.
+$builder->orNot(string $column, string $operator, ?string $binder = null): self
+
+// Add OR BETWEEN clause to conditions.
+$builder->orBetween(string $column, ?string $left = null, ?string $right = null): self
+
+// Add OR NOT BETWEEN clause to conditions.
+$builder->orNotBetween(string $column, ?string $left = null, ?string $right = null): self
+
+// Build the query and set it to the query attribute.
+$builder->build(): string
+
+// Return the last built query or empty string.
+$builder->query(): string
+
+// Return array with used parameterized names acresced by ':' notation.
+$builder->getBindParams(): array
 ```
 
 
