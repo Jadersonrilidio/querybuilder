@@ -116,7 +116,6 @@ echo $builder->query();
 
 **ATTENTION!** Calling the `build()` method a second time will override the previously saved query.
 
-
 **NOTE:** The `$builder` object also enables partial construction of the query,
 providing more flexibility for the user:
 
@@ -138,6 +137,9 @@ Output:
 "SELECT users.uuid, users.name AS username, users.email FROM users WHERE uuid = :uuid"
 ```
 
+**NOTE:** It si important to say that each use-case has its own set of methods,
+that could differ from each other either if the methods have the same name. In the
+next examples you could notice the difference of called methods for each use-case:
 
 **Example 02**
 
@@ -227,7 +229,7 @@ More detailed explanation for each use-case could be seen on the sections bellow
 
 ### DELETE Queries
 
-**Methods**
+**Available Methods**
 
 
 ```php
