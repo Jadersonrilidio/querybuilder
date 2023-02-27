@@ -234,59 +234,83 @@ More detailed explanation for each use-case could be seen on the sections bellow
 
 
 ```php
-// Start building DELETE query.
-public function delete(string $table): self
+class DeleteQueryBuilder {
 
-// Start WHERE clause.
-public function where(string $column, string $operator, ?string $binder = null): self
+    /* Methods */
 
-// Start WHERE NOT clause.
-public function whereNot(string $column, string $operator, ?string $binder = null): self
+    // Start building DELETE query.
+    public function delete(string $table): self
 
-// Start WHERE IN clause.
-public function whereIn(string $column, string $subquery): self
+    // Start WHERE clause.
+    public function where(string $column, string $operator, ?string $binder = null): self
 
-// Start WHERE NOT IN clause.
-public function whereNotIn(string $column, string $subquery): self
+    // Start WHERE NOT clause.
+    public function whereNot(string $column, string $operator, ?string $binder = null): self
 
-// Start WHERE BETWEEN clause.
-public function whereBetween(string $column, ?string $left = null, ?string $right = null): self
+    // Start WHERE IN clause.
+    public function whereIn(string $column, string $subquery): self
 
-// Start WHERE NOT BETWEEN clause.
-public function whereNotBetween(string $column, ?string $left = null, ?string $right = null): self
+    // Start WHERE NOT IN clause.
+    public function whereNotIn(string $column, string $subquery): self
 
-// Add AND clause to conditions.
-public function and(string $column, string $operator, ?string $binder = null): self
+    // Start WHERE BETWEEN clause.
+    public function whereBetween(string $column, ?string $left = null, ?string $right = null): self
 
-// Add AND NOT clause to conditions.
-public function andNot(string $column, string $operator, ?string $binder = null): self
+    // Start WHERE NOT BETWEEN clause.
+    public function whereNotBetween(string $column, ?string $left = null, ?string $right = null): self
 
-// Add AND BETWEEN clause to conditions.
-public function andBetween(string $column, ?string $left = null, ?string $right = null): self
+    // Add AND clause to conditions.
+    public function and(string $column, string $operator, ?string $binder = null): self
 
-// Add AND NOT BETWEEN clause to conditions.
-public function andNotBetween(string $column, ?string $left = null, ?string $right = null): self
+    // Add AND NOT clause to conditions.
+    public function andNot(string $column, string $operator, ?string $binder = null): self
 
-// Add OR clause to conditions.
-public function or(string $column, string $operator, ?string $binder = null): self
+    // Add AND BETWEEN clause to conditions.
+    public function andBetween(string $column, ?string $left = null, ?string $right = null): self
 
-// Add OR NOT clause to conditions.
-public function orNot(string $column, string $operator, ?string $binder = null): self
+    // Add AND NOT BETWEEN clause to conditions.
+    public function andNotBetween(string $column, ?string $left = null, ?string $right = null): self
 
-// Add OR BETWEEN clause to conditions.
-public function orBetween(string $column, ?string $left = null, ?string $right = null): self
+    // Add OR clause to conditions.
+    public function or(string $column, string $operator, ?string $binder = null): self
 
-// Add OR NOT BETWEEN clause to conditions.
-public function orNotBetween(string $column, ?string $left = null, ?string $right = null): self
+    // Add OR NOT clause to conditions.
+    public function orNot(string $column, string $operator, ?string $binder = null): self
 
-// Build the query and set it to the query attribute.
-public function build(): string
+    // Add OR BETWEEN clause to conditions.
+    public function orBetween(string $column, ?string $left = null, ?string $right = null): self
 
-// Return the last built query or empty string.
-public function query(): string
+    // Add OR NOT BETWEEN clause to conditions.
+    public function orNotBetween(string $column, ?string $left = null, ?string $right = null): self
 
-// Return array with used parameterized names acresced by ':' notation.
-public function getBindParams(): array
+    // Build the query and set it to the query attribute.
+    public function build(): string
+
+    // Return the last built query or empty string.
+    public function query(): string
+
+    // Return array with used parameterized names acresced by ':' notation.
+    public function getBindParams(): array
+}
+
+DeleteQueryBuilder::delete() # Start building DELETE query.
+DeleteQueryBuilder::where() # Start WHERE clause.
+DeleteQueryBuilder::whereNot() # Start WHERE NOT clause.
+DeleteQueryBuilder::whereIn() # Start WHERE IN clause.
+DeleteQueryBuilder::whereNotIn() # Start WHERE NOT clause.
+DeleteQueryBuilder::whereBetweeen() # Start WHERE BETWEEN clause.
+DeleteQueryBuilder::whereNotBetween() # Start WHERE NOT BETWEEN clause.
+DeleteQueryBuilder::and() # Add AND clause to conditions.
+DeleteQueryBuilder::andNot() # Add AND NOT clause to conditions.
+DeleteQueryBuilder::andBetween() # Add AND BETWEEN clause to conditions.
+DeleteQueryBuilder::andNotBetween() # Add AND NOT BETWEEN clause to conditions.
+DeleteQueryBuilder::or() # Add OR clause to conditions.
+DeleteQueryBuilder::orNot() # Add OR NOT clause to conditions.
+DeleteQueryBuilder::orBetween() # Add OR BETWEEN clause to conditions.
+DeleteQueryBuilder::orNotBetween() # Add OR NOT BETWEEN clause to conditions.
+DeleteQueryBuilder::build() # Build the query and set it to the query attribute.
+DeleteQueryBuilder::query() # Return the last built query or empty string.
+DeleteQueryBuilder::getBindParams() # Return array with used parameterized names acresced by ':' notation.
 ```
 
 ```php
