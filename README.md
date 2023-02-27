@@ -25,7 +25,7 @@ A lightweight, straight-forward and easy-to-use SQL query builder for DML and DQ
 
 ## About
 
-**Writing hard coded SQL queries is a subject of great concern amongst developers!**
+**Writing SQL queries by hand is subject of great concern amongst developers!**
 It not just let your code 'dirty' (as some PHP purists might say) but also affects
 testability, simplicity and impose more work and time over development. With this in
 mind, this package comes in handy with a simple approach of wrapping SQL queries into
@@ -134,6 +134,34 @@ Output:
 
 ```sql
 "SELECT users.uuid, users.name AS username, users.email FROM users WHERE uuid = :uuid"
+```
+
+Partial construction simplifies certain cases where a SQL query depends on
+certain conditions as in the example bellow:
+
+```php
+$columns = ['uuid', 'name', 'email'];
+$userUuid = 'example-user-uuid';
+
+$builder->selectFrom('users');
+
+foreach ($columns as $column) {
+    $builder->column($column)
+}
+
+if (isset($userUuid)) {
+    $builder->where('uuid', '=', 'uuid');
+}
+
+$query = $builder->build();
+
+echo $query;
+```
+
+Output:
+
+```sql
+"SELECT users.uuid, users.name, users.email FROM users WHERE uuid = :uuid"
 ```
 
 **NOTE:** It is important to say that **EACH USE-CASE INSTANCE HAS ITS OWN SET OF METHODS**,
