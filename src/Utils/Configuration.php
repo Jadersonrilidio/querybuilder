@@ -73,7 +73,7 @@ class Configuration
             return include $configFilePath;
         }
 
-        if (file_exists($path = dirname(dirname(dirname(__DIR__))) . '/config/queryBuilderConfig.php')) {
+        if (file_exists($path = dirname(dirname(dirname(dirname(__DIR__)))) . '/config/queryBuilderConfig.php')) {
             return include $path;
         }
 

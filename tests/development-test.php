@@ -7,8 +7,8 @@ require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 use Jayrods\QueryBuilder\QueryBuilder;
 
-$dotenv = \Dotenv\Dotenv::createImmutable(dirname(__DIR__));
-$dotenv->load();
+// $dotenv = \Dotenv\Dotenv::createImmutable(dirname(__DIR__));
+// $dotenv->load();
 
 // $configPath = dirname(__DIR__) . '/config/queryBuilderConfig.php';
 

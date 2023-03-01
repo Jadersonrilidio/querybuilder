@@ -32,7 +32,7 @@
     "minimum-stability": "stable",
     "scripts": {
         "proc-test": "php tests/development-test.php",
-        "qb-publish-config": "php bin/qb_publish_config",
+        "qb-publish-config": "php bin/qb-publish-config",
         "cbf": "vendor/bin/phpcbf --standard=PSR12 src/",
         "cs": "vendor/bin/phpcs --standard=PSR12 src/",
         "phan": "vendor/bin/phan --allow-polyfill-parser",
@@ -54,6 +54,6 @@
         "deploy-check": ""
     },
     "bin": [
-        "qb_publish_config"
+        "bin/qb-publish-config"
     ]
 }
