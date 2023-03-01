@@ -1,6 +1,5 @@
 * text=auto
 
-/bin export-ignore
 /resources export-ignore
 /tests export-ignore
 /vendor export-ignore
