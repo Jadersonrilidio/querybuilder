@@ -1,0 +1,89 @@
+#!/usr/bin/env php
+<?php
+
+$path = $argv[1] ?? dirname(dirname(dirname(__DIR__))) . '/config/';
+
+if (!file_exists($path) or !is_dir($path)) {
+    $answer = readline("Folder 'config' doesn't exists on root directory. Wants to create folder? (yes/no): ");
+
+    if ($answer === 'yes') {
+        echo "Creating 'config' folder on root directory..." . PHP_EOL;
+        mkdir($path);
+    } else {
+        exit("Operation aborted." . PHP_EOL);
+    }
+}
+
+$file = $path . 'queryBuilderConfig.php';
+
+if (file_exists($file)) {
+    $answer = readline("File already exists. Wants to override? (yes/no): ");
+
+    if ($answer === 'yes') {
+        echo "Overriding file..." . PHP_EOL;
+    } else {
+        exit("Override operation aborted." . PHP_EOL);
+    }
+}
+
+try {
+
+    $handler = fopen($file, 'w');
+} catch (Throwable $e) {
+
+    echo $e->getMessage() . PHP_EOL;
+
+    $answer = readline("Create config file on provided path failed. Wants to try creating file at root directory? (yes/no): ");
+
+    if ($answer === 'yes') {
+        echo "Attempting to create file at root directory..." . PHP_EOL;
+    } else {
+        exit("Operation aborted." . PHP_EOL);
+    }
+
+    $path = dirname(dirname(dirname(__DIR__)));
+
+    $file = $path . '/queryBuilderConfig.php';
+
+    if (file_exists($file)) {
+        $answer = readline("File already exists at root directory. Are you sure to override? (yes/no): ");
+
+        if ($answer === 'yes') {
+            echo "Overriding root directory config file..." . PHP_EOL;
+        } else {
+            exit("Override root directory config file operation aborted." . PHP_EOL);
+        }
+    }
+
+    try {
+
+        $handler = fopen($file, 'w');
+    } catch (Throwable $e) {
+
+        exit($e->getMessage() . PHP_EOL);
+    } finally {
+
+        if (isset($handler)) {
+            fclose($handler);
+        }
+    }
+} finally {
+
+    if (isset($handler)) {
+        fclose($handler);
+    }
+}
+
+$content = file_get_contents(dirname(__DIR__) . '/config/queryBuilderConfig.php');
+
+if (!$content) {
+    exit("Package config file not found. Operation aborted." . PHP_EOL);
+}
+
+$result = file_put_contents($file, $content);
+
+if (!$result) {
+    exit("Error writing on file. Operation aborted." . PHP_EOL);
+}
+
+exit("File queryBuilderConfig.php puslished successfuly." . PHP_EOL);
