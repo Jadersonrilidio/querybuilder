@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-$path = $argv[1] ?? dirname(dirname(dirname(__DIR__))) . '/config/';
+$path = $argv[1] ?? dirname(dirname(dirname(dirname(__DIR__)))) . '/config/';
 
 if (!file_exists($path) or !is_dir($path)) {
     $answer = readline("Folder 'config' doesn't exists on root directory. Wants to create folder? (yes/no): ");
@@ -41,7 +41,7 @@ try {
         exit("Operation aborted." . PHP_EOL);
     }
 
-    $path = dirname(dirname(dirname(__DIR__)));
+    $path = dirname(dirname(dirname(dirname(__DIR__))));
 
     $file = $path . '/queryBuilderConfig.php';
 
